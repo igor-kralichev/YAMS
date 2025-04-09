@@ -1,5 +1,6 @@
 # admin_service/app/main.py
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, HTTPException
+from fastapi.responses import RedirectResponse
 from sqladmin import Admin
 from sqlalchemy.sql import text
 from starlette.middleware.sessions import SessionMiddleware
@@ -15,6 +16,14 @@ app = FastAPI(
 
 # Добавляем middleware для работы с сессиями
 app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
+
+# Middleware для перенаправления с "/" на "/admin"
+@app.middleware("http")
+async def redirect_to_admin(request: Request, call_next):
+    if request.url.path == "/":
+        # Перенаправляем на /admin
+        return RedirectResponse(url="/admin")
+    return await call_next(request)
 
 # Проверка подключения к базе данных при запуске
 @app.on_event("startup")

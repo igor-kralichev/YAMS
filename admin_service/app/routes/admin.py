@@ -12,7 +12,7 @@ import logging
 from starlette.responses import RedirectResponse
 
 from shared.db.session import AsyncSessionLocal
-from shared.db.models import Account_Model, Deal_Model, Feedback_Model
+from shared.db.models import Account_Model, Deal_Model, Feedback_Model, DealDetail, DealTypes, DealBranch, Region
 from shared.core.config import settings
 from shared.services.email import send_email
 
@@ -247,3 +247,35 @@ class FeedbackAdmin(ModelView, model=Feedback_Model):
             subject = f"Ваш отзыв на сделку '{model.deal.name_deal}' был удалён"
             body = f"Ваш отзыв на сделку '{model.deal.name_deal}' был удалён из-за нарушений правил пользования."
             asyncio.create_task(send_email(to_email=model.author.email, subject=subject, body=body))
+
+# Класс для администрирования регионов
+class RegionAdmin(ModelView, model=Region):
+    column_list = ["id", "name"]
+    column_searchable_list = ["name"]
+    page_size = 20
+    name = "Регион"
+    name_plural = "Регионы"
+
+# Класс для администрирования отраслей сделок
+class DealBranchAdmin(ModelView, model=DealBranch):
+    column_list = ["id", "name"]
+    column_searchable_list = ["name"]
+    page_size = 20
+    name = "Отрасль сделки"
+    name_plural = "Отрасли сделок"
+
+# Класс для администрирования типов сделок
+class DealTypesAdmin(ModelView, model=DealTypes):
+    column_list = ["id", "name"]
+    column_searchable_list = ["name"]
+    page_size = 20
+    name = "Тип сделки"
+    name_plural = "Типы сделок"
+
+# Класс для администрирования деталей сделок
+class DealDetailAdmin(ModelView, model=DealDetail):
+    column_list = ["id", "detail"]
+    column_searchable_list = ["detail"]
+    page_size = 20
+    name = "Деталь сделки"
+    name_plural = "Детали сделок"

@@ -1,0 +1,57 @@
+asyncapi: '2.0.0'
+info:
+  title: Chat Service WebSocket API
+  version: '1.0.0'
+servers:
+  production:
+    url: ws://localhost:8000
+    protocol: ws
+channels:
+  /api/chat/ws/deals/{deal_id}/{consumer_id}:
+    parameters:
+      deal_id:
+        description: Идентификатор сделки
+        schema:
+          type: integer
+      consumer_id:
+        description: Идентификатор пользователя (покупателя), но не продавец сделки
+        schema:
+          type: integer
+    subscribe:
+      summary: Подключение к чату по сделке
+      description: Подключение к WebSocket-чату для обмена сообщениями по конкретной сделке.
+      message:
+        contentType: application/json
+        headers:
+          type: object
+          properties:
+            Authorization:
+              description: Токен авторизации в формате Bearer <token>
+              type: string
+        payload:
+          type: object
+          properties:
+            sender_id:
+              type: integer
+              description: ID отправителя
+            recipient_id:
+              type: integer
+              description: ID получателя
+            content:
+              type: string
+              description: Содержимое сообщения
+            created_at:
+              type: string
+              format: date-time
+              description: Время отправки сообщения
+    publish:
+      summary: Отправка сообщения в чат
+      message:
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            content:
+              type: string
+              description: Содержимое сообщения
+              maxLength: 1000

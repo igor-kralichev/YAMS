@@ -1,6 +1,5 @@
 # admin_service/app/routes/admin.py
 import asyncio
-from typing import List
 
 from fastapi import APIRouter, HTTPException, status
 from sqladmin import ModelView, action

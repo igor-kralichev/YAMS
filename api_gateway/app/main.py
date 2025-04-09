@@ -2,7 +2,6 @@ import asyncio
 import json
 from typing import Optional
 import logging
-import os
 
 from fastapi_csrf_protect.exceptions import CsrfProtectError
 from redis.asyncio import Redis
@@ -10,7 +9,7 @@ from fastapi import FastAPI, Depends, Request, status, HTTPException, WebSocket,
 from fastapi.security import OAuth2PasswordBearer
 from fastapi_csrf_protect import CsrfProtect
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, Response
+from fastapi.responses import Response
 from fastapi_limiter import FastAPILimiter
 from httpx import AsyncClient, Timeout
 from websockets import connect as websocket_connect

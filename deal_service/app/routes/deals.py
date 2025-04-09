@@ -1,14 +1,12 @@
 # deal_service/app/routes/deal.py
-from datetime import datetime
-import json
 import os
 import shutil
 import uuid
 from pathlib import Path
 
-import aiofiles
+
 from fastapi import APIRouter, Depends, HTTPException, status, Form, UploadFile, File
-from sqlalchemy import select, update, func
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
 

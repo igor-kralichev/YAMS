@@ -1,6 +1,5 @@
 # admin_service/app/main.py
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse  # Добавляем для перенаправления
 from sqladmin import Admin
 from sqlalchemy.sql import text
 from starlette.middleware.sessions import SessionMiddleware

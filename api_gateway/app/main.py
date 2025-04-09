@@ -2,6 +2,7 @@ import asyncio
 import json
 from typing import Optional
 import logging
+import os
 
 from fastapi_csrf_protect.exceptions import CsrfProtectError
 from redis.asyncio import Redis
@@ -9,6 +10,7 @@ from fastapi import FastAPI, Depends, Request, status, HTTPException, WebSocket,
 from fastapi.security import OAuth2PasswordBearer
 from fastapi_csrf_protect import CsrfProtect
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse, Response
 from fastapi_limiter import FastAPILimiter
 from httpx import AsyncClient, Timeout
 from websockets import connect as websocket_connect
@@ -57,7 +59,8 @@ redis_client = Redis(
 SERVICE_URLS = {
     "auth": "http://localhost:8001",
     "deal": "http://localhost:8002",
-    "rating": "http://localhost:8003"
+    "rating": "http://localhost:8003",
+    "admin": "http://localhost:8005"
 }
 
 # Создание таблиц при запуске
@@ -74,6 +77,43 @@ async def startup_event():
 def get_csrf_protect():
     return csrf_protect
 
+
+@app.api_route(
+    "/api/admin/{path:path}",
+    methods=["GET", "POST", "PUT", "DELETE"],
+    summary="Проксирование запросов к Admin Service",
+    description="Переадресация запросов к Admin Service для управления пользователями, сделками и другими сущностями."
+)
+async def proxy_to_admin_service(request: Request, path: str):
+    # Полный перехват и модификация URL
+    full_path = str(request.url)
+    admin_path = full_path.split("/api/admin/")[-1]
+
+    # Заменяем пути к статическим файлам
+    if admin_path.startswith("statics/"):
+        target_url = f"{SERVICE_URLS['admin']}/{admin_path}"
+    else:
+        target_url = f"{SERVICE_URLS['admin']}/admin/{admin_path}"
+
+    async with AsyncClient() as client:
+        # Копируем все заголовки кроме Host
+        headers = {k: v for k, v in request.headers.items() if k.lower() != "host"}
+
+        response = await client.request(
+            method=request.method,
+            url=target_url,
+            headers=headers,
+            params=request.query_params,
+            content=await request.body()
+        )
+
+        # Возвращаем ответ как есть
+        return Response(
+            content=response.content,
+            status_code=response.status_code,
+            headers=dict(response.headers),
+            media_type=response.headers.get("content-type")
+        )
 
 # Маршрут для CSRF-токена (остаётся в Gateway)
 @app.get(

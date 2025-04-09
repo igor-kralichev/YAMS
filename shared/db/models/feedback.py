@@ -26,5 +26,5 @@ class Feedback_Model(Base):
     )
     is_purchaser = Column(Boolean, nullable=False, default=False)  # Метка: покупал ли пользователь сделку
 
-    author = relationship("Account_Model", back_populates="feedbacks")
-    deal = relationship("Deal_Model", back_populates="feedback")
+    deal = relationship("Deal_Model", back_populates="feedback", lazy="joined")
+    author = relationship("Account_Model", back_populates="feedbacks", lazy="joined")

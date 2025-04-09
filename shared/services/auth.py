@@ -2,6 +2,7 @@ import logging
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
+from passlib.context import CryptContext
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
@@ -90,3 +91,27 @@ async def get_current_company(
         )
     return company
 
+
+# Настройка хеширования паролей
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """
+    Проверяет, совпадает ли введённый пароль с хешированным.
+
+    :param plain_password: Пароль в открытом виде
+    :param hashed_password: Хешированный пароль из базы данных
+    :return: True, если пароли совпадают, иначе False
+    """
+    return pwd_context.verify(plain_password, hashed_password)
+
+
+def get_password_hash(password: str) -> str:
+    """
+    Хеширует пароль.
+
+    :param password: Пароль в открытом виде
+    :return: Хешированный пароль
+    """
+    return pwd_context.hash(password)

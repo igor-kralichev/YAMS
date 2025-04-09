@@ -42,5 +42,5 @@ class Deal_Model(Base):
         back_populates="purchased_deals",
         order_by="deal_consumers.c.created_at"
     )
-    seller = relationship("Account_Model", foreign_keys=[seller_id])
+    seller = relationship("Account_Model", foreign_keys=[seller_id], lazy="joined")
     deal_type = relationship("DealTypes", back_populates="deals")

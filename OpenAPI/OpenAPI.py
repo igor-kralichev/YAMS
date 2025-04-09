@@ -24,7 +24,7 @@ combined_spec = {
     }
 }
 
-# Создаем папку services, если её нет
+# Создаем папку templates, если её нет
 os.makedirs("services", exist_ok=True)
 
 

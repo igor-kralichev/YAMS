@@ -7,6 +7,7 @@ services = [
     {"name": "auth_service", "port": 8001},
     {"name": "deal_service", "port": 8002},
     {"name": "rating_service", "port": 8003},
+    {"name": "admin_service", "port": 8005},
     {"name": "api_gateway", "port": 8000}
 ]
 

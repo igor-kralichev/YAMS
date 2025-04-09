@@ -227,7 +227,7 @@ class DealAdmin(ModelView, model=Deal_Model):
         # model.seller — продавец, связанный со сделкой
         if model.seller and model.seller.email:
             subject = f"Ваша сделка '{model.name_deal}' была удалена"
-            body = f"Уведомляем вас, что ваша сделка '{model.name_deal}' была удалена из-за нарушений правил пользования."
+            body = f"Уведомляем вас, что ваша сделка '{model.name_deal}' была удалена из-за нарушений правил сообщества."
             asyncio.create_task(send_email(to_email=model.seller.email, subject=subject, body=body))
 
 # Класс для администрирования отзывов
@@ -245,7 +245,7 @@ class FeedbackAdmin(ModelView, model=Feedback_Model):
         # model.author — автор отзыва
         if model.deal and model.author and model.author.email:
             subject = f"Ваш отзыв на сделку '{model.deal.name_deal}' был удалён"
-            body = f"Ваш отзыв на сделку '{model.deal.name_deal}' был удалён из-за нарушений правил пользования."
+            body = f"Ваш отзыв на сделку '{model.deal.name_deal}' был удалён из-за нарушений правил сообщества."
             asyncio.create_task(send_email(to_email=model.author.email, subject=subject, body=body))
 
 # Класс для администрирования регионов

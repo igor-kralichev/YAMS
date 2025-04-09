@@ -7,7 +7,7 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from shared.core.config import settings
 from shared.db.session import engine, AsyncSessionLocal
-from admin_service.app.routes.admin import admin_router, AccountAdmin, DealAdmin, FeedbackAdmin, AdminAuth
+from admin_service.app.routes.admin import admin_router, AccountAdmin, DealAdmin, FeedbackAdmin, AdminAuth, DealTypesAdmin, DealDetailAdmin, DealBranchAdmin, RegionAdmin
 
 app = FastAPI(
     title="Admin Service",
@@ -61,6 +61,14 @@ try:
     admin.add_view(DealAdmin)
     print("Регистрация представлений отзывов")
     admin.add_view(FeedbackAdmin)
+    print("Регистрация представлений типов сделок")
+    admin.add_view(DealTypesAdmin)
+    print("Регистрация представлений отраслей для сделок")
+    admin.add_view(DealBranchAdmin)
+    print("Регистрация представлений деталей сделки")
+    admin.add_view(DealDetailAdmin)
+    print("Регистрация представлений регионов")
+    admin.add_view(RegionAdmin)
 except Exception as e:
     print(f"Ошибка регистрации представлений: {str(e)}")
     raise e

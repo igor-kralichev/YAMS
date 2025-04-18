@@ -165,7 +165,7 @@ async def auth_proxy(request: Request, path: str):
 
 # ЛК пользователя
 @app.api_route(
-    "/api/users/{path:path}",
+    "/api/user/{path:path}",
     methods=["GET", "POST", "PUT", "DELETE"],
     summary="Проксирование запросов к Auth Service",
     description=(
@@ -210,7 +210,7 @@ async def users_proxy(
 
 # ЛК компании
 @app.api_route(
-    "/api/companies/{path:path}",
+    "/api/company/{path:path}",
     methods=["GET", "POST", "PUT", "DELETE"],
     summary="Проксирование запросов к Auth Service",
     description=(

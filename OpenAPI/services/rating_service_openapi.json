@@ -203,14 +203,14 @@
         }
       }
     },
-    "/rating/ranking-topsis-companies": {
+    "/rating/ranking-vikor-companies": {
       "get": {
         "tags": [
           "rating"
         ],
-        "summary": "Рейтинг компаний по TOPSIS",
-        "description": "Выводит компании по 30 на страницу, ранжированные по 5 критериям с использованием TOPSIS",
-        "operationId": "get_topsis_companies_rating_ranking_topsis_companies_get",
+        "summary": "Рейтинг компаний по VIKOR",
+        "description": "Выводит компании по 30 на страницу, ранжированные по 5 критериям с использованием VIKOR",
+        "operationId": "get_vikor_companies_rating_ranking_vikor_companies_get",
         "parameters": [
           {
             "name": "page",
@@ -246,7 +246,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Page_CompanyParetoSchema_"
+                  "$ref": "#/components/schemas/Page_CompanyVikorSchema_"
                 }
               }
             }
@@ -423,68 +423,6 @@
         ],
         "title": "CompanyDetailSchema"
       },
-      "CompanyParetoSchema": {
-        "properties": {
-          "id": {
-            "type": "integer",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "logo_url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Logo Url"
-          },
-          "average_rating": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Average Rating"
-          },
-          "feedback_count": {
-            "type": "integer",
-            "title": "Feedback Count"
-          },
-          "order_count": {
-            "type": "integer",
-            "title": "Order Count"
-          },
-          "repeat_customer_orders": {
-            "type": "integer",
-            "title": "Repeat Customer Orders"
-          },
-          "pareto_score": {
-            "type": "number",
-            "title": "Pareto Score"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "name",
-          "logo_url",
-          "average_rating",
-          "feedback_count",
-          "order_count",
-          "repeat_customer_orders",
-          "pareto_score"
-        ],
-        "title": "CompanyParetoSchema"
-      },
       "CompanyShortSchema": {
         "properties": {
           "id": {
@@ -567,6 +505,68 @@
         ],
         "title": "CompanyShortSchema"
       },
+      "CompanyVikorSchema": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url"
+          },
+          "average_rating": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Average Rating"
+          },
+          "feedback_count": {
+            "type": "integer",
+            "title": "Feedback Count"
+          },
+          "order_count": {
+            "type": "integer",
+            "title": "Order Count"
+          },
+          "repeat_customer_orders": {
+            "type": "integer",
+            "title": "Repeat Customer Orders"
+          },
+          "vikor_score": {
+            "type": "number",
+            "title": "Vikor Score"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "logo_url",
+          "average_rating",
+          "feedback_count",
+          "order_count",
+          "repeat_customer_orders",
+          "vikor_score"
+        ],
+        "title": "CompanyVikorSchema"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -597,74 +597,6 @@
           "name"
         ],
         "title": "IndustrySchema"
-      },
-      "Page_CompanyParetoSchema_": {
-        "properties": {
-          "items": {
-            "items": {
-              "$ref": "#/components/schemas/CompanyParetoSchema"
-            },
-            "type": "array",
-            "title": "Items"
-          },
-          "total": {
-            "anyOf": [
-              {
-                "type": "integer",
-                "minimum": 0.0
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Total"
-          },
-          "page": {
-            "anyOf": [
-              {
-                "type": "integer",
-                "minimum": 1.0
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Page"
-          },
-          "size": {
-            "anyOf": [
-              {
-                "type": "integer",
-                "minimum": 1.0
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Size"
-          },
-          "pages": {
-            "anyOf": [
-              {
-                "type": "integer",
-                "minimum": 0.0
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Pages"
-          }
-        },
-        "type": "object",
-        "required": [
-          "items",
-          "total",
-          "page",
-          "size",
-          "pages"
-        ],
-        "title": "Page[CompanyParetoSchema]"
       },
       "Page_CompanyShortSchema_": {
         "properties": {
@@ -733,6 +665,74 @@
           "pages"
         ],
         "title": "Page[CompanyShortSchema]"
+      },
+      "Page_CompanyVikorSchema_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CompanyVikorSchema"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size"
+          },
+          "pages": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "size",
+          "pages"
+        ],
+        "title": "Page[CompanyVikorSchema]"
       },
       "PartnerSchema": {
         "properties": {

@@ -6,25 +6,27 @@ from shared.db.base import Base
 class Feedback_Model(Base):
     __tablename__ = "feedback"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)  # Уже индексирован (PK)
     deal_id = Column(
         Integer,
-        ForeignKey("deals.id", ondelete="CASCADE"),  # Изменили на CASCADE, чтобы отзывы удалялись
-        nullable=True
+        ForeignKey("deals.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True  # Индекс для JOIN
     )
-    stars = Column(Integer, nullable=False)  # Оценка (от 0 до 5)
-    details = Column(Text, nullable=False)  # Описание отзыва
+    stars = Column(Integer, nullable=False)
+    details = Column(Text, nullable=False)
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.timezone('Europe/Moscow', func.now()),
         nullable=False
-    )  # Время создания отзыва
+    )
     author_id = Column(
         Integer,
-        ForeignKey("accounts.id", ondelete="SET NULL"),  # Устанавливаем NULL при удалении аккаунта
-        nullable=True
+        ForeignKey("accounts.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True  # Индекс для JOIN
     )
-    is_purchaser = Column(Boolean, nullable=False, default=False)  # Метка: покупал ли пользователь сделку
+    is_purchaser = Column(Boolean, nullable=False, default=False)
 
     deal = relationship("Deal_Model", back_populates="feedback", lazy="joined")
     author = relationship("Account_Model", back_populates="feedbacks", lazy="joined")

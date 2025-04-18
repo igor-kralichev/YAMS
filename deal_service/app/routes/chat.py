@@ -12,8 +12,7 @@ from sqlalchemy import select, func, or_, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, aliased
 
-from auth_service.app.services.auth import verify_token
-from shared.core.config import settings
+from deal_service.app.services.chat import get_token_from_header, verify_token
 from shared.db.models import Account_Model, Deal_Model, Message_Model
 from shared.db.models.deal_consumers import DealConsumers as deal_consumers
 from shared.db.schemas.chat import ChatSchema
@@ -144,58 +143,6 @@ async def get_user_chats(
             detail=f"Ошибка при получении чатов: {str(e)}"
         )
 
-
-async def get_token_from_header(websocket: WebSocket) -> str:
-    auth_header = websocket.headers.get("Authorization")
-    if not auth_header:
-        raise WebSocketException(
-            code=status.WS_1008_POLICY_VIOLATION,
-            reason="Заголовок авторизации отсутствует"
-        )
-
-    try:
-        scheme, token = auth_header.split()
-        if scheme.lower() != "bearer":
-            raise WebSocketException(
-                code=status.WS_1008_POLICY_VIOLATION,
-                reason="Недопустимая схема аутентификации"
-            )
-        return token
-    except ValueError:
-        raise WebSocketException(
-            code=status.WS_1008_POLICY_VIOLATION,
-            reason="Недопустимый формат заголовка авторизации"
-        )
-
-
-async def verify_token(token: str) -> dict:
-    try:
-        payload = jwt.decode(
-            token,
-            settings.SECRET_KEY,
-            algorithms=[settings.ALGORITHM]
-        )
-
-        # Дополнительная ручная проверка срока действия
-        expire_timestamp = payload.get("exp")
-        if not expire_timestamp:
-            raise WebSocketException(
-                code=status.WS_1008_POLICY_VIOLATION,
-                reason="Срок действия токена не истек"
-            )
-
-        if datetime.utcnow() > datetime.fromtimestamp(expire_timestamp):
-            raise WebSocketException(
-                code=status.WS_1008_POLICY_VIOLATION,
-                reason="Срок действия токена истек"
-            )
-
-        return payload
-    except JWTError as e:
-        raise WebSocketException(
-            code=status.WS_1008_POLICY_VIOLATION,
-            reason=f"Недопустимый токен: {str(e)}"
-        )
 
 
 @router.websocket("/ws/deals/{deal_id}/{consumer_id}")

@@ -7,8 +7,8 @@ from .deal_consumers import DealConsumers
 class Account_Model(Base):
     __tablename__ = "accounts"
 
-    id = Column(Integer, primary_key=True, index=True)
-    email = Column(String(255), nullable=False, unique=True)
+    id = Column(Integer, primary_key=True, index=True)  # Уже индексирован (PK)
+    email = Column(String(255), nullable=False, unique=True, index=True)  # Уже индексирован через unique=True
     hashed_password = Column(String(255), nullable=False)
     is_active = Column(Boolean, nullable=False)
     is_verified = Column(Boolean, nullable=False)
@@ -20,8 +20,12 @@ class Account_Model(Base):
     )
     role = Column(String(255), nullable=False)
     phone_num = Column(BIGINT, nullable=True)
-    # ondelete SET NULL – значит, если удалят регион, поле станет NULL
-    region_id = Column(Integer, ForeignKey("regions.id", ondelete="SET NULL"), nullable=True)
+    region_id = Column(
+        Integer,
+        ForeignKey("regions.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True  # Индекс для фильтрации и сортировки в GET /companies
+    )
 
     # Связи
     user = relationship("User_Model", back_populates="account", uselist=False, lazy="joined")

@@ -1,4 +1,4 @@
-# auth_service/app/routes/companies.py
+# lk_service/app/routes/users.py
 import os
 import secrets
 from pathlib import Path
@@ -8,60 +8,59 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Backgro
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, delete
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-
 from sqlalchemy.orm import joinedload
 
 from auth_service.app.routes.auth import send_verification_email
-from shared.services.transliterate import transliterate
-from shared.core.security import get_password_hash, verify_password
-from shared.db.models import Company_Model as CompanyModel, Account_Model
-from shared.db.schemas import Company as CompanySchema
-from shared.services.auth import get_current_company
-from shared.db.schemas.company import CompanyUpdate, ChangePasswordRequest
+from shared.db.models import User_Model as UserModel, Account_Model
+from shared.db.schemas import User as UserSchema
+from shared.services.auth import get_current_user
+from shared.db.schemas.user import UserUpdate, ChangePasswordRequest
 from shared.db.session import get_db
+from shared.core.security import get_password_hash, verify_password
+from shared.services.transliterate import transliterate
 
 router = APIRouter()
 
 
 @router.get(
     "/me",
-    response_model=CompanySchema,
-    summary="GET запрос на просмотр данных о компании, которая авторизовалась",
+    response_model=UserSchema,
+    summary="GET на просмотр данных пользователя",
     description=(
-            "Это основа, база для ЛК"
+            "ЛК пользователя"
     )
 )
-async def read_companies_me(
-    current_company: CompanyModel = Depends(get_current_company)
+async def read_users_me(
+        current_user: UserModel = Depends(get_current_user)
 ):
-    return current_company
+    return current_user
 
 
 @router.put(
     "/me",
-    response_model=CompanySchema,
-    summary="PUT запрос на обновление данных",
+    response_model=UserSchema,
+    summary="PUT запрос на изменение данных пользователя",
     description=(
-            "Обновить данные по компании в ЛК (лого в другом месте обновляем)"
+            "Также как с компанией, т.е. без фото"
     )
 )
-async def update_company(
-    update_data: CompanyUpdate,
-    background_tasks: BackgroundTasks,
-    current_company: CompanyModel = Depends(get_current_company),
-    db: AsyncSession = Depends(get_db)
+async def update_user(
+        update_data: UserUpdate,
+        background_tasks: BackgroundTasks,
+        current_user: UserModel = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db)
 ):
     try:
         update_dict = update_data.dict(exclude_unset=True)
         account_data = {}
-        company_data = {}
+        user_data = {}
 
-        # Разделение данных: аккаунт vs компания
+        # Разделение данных: аккаунт vs пользователь
         for key, value in update_dict.items():
             if key in ["email", "phone_num", "region_id"]:
                 account_data[key] = value
             else:
-                company_data[key] = value
+                user_data[key] = value
 
         # Обновление аккаунта (email)
         if account_data:
@@ -69,12 +68,12 @@ async def update_company(
                 new_email = account_data["email"]
 
                 # Проверка, что email действительно меняется
-                if new_email != current_company.account.email:
+                if new_email != current_user.account.email:
                     existing_account = await db.execute(
                         select(Account_Model).filter(Account_Model.email == new_email)
                     )
                     existing = existing_account.scalar()
-                    if existing and existing.id != current_company.account_id:
+                    if existing and existing.id != current_user.account_id:
                         raise HTTPException(400, detail="Email уже используется")
 
                     # Генерация токена и сброс верификации
@@ -83,30 +82,29 @@ async def update_company(
                     account_data["verification_token"] = verification_token
 
                     # Отправка письма
-                    background_tasks.add_task(send_verification_email, email=new_email, token=verification_token,
-                                              type="company")
+                    background_tasks.add_task(send_verification_email, email=new_email, token=verification_token, type="user")
 
             await db.execute(
                 update(Account_Model)
-                .where(Account_Model.id == current_company.account_id)
+                .where(Account_Model.id == current_user.account_id)
                 .values(**account_data)
             )
 
-        # Обновление компании
-        if company_data:
+        # Обновление пользователя
+        if user_data:
             await db.execute(
-                update(CompanyModel)
-                .where(CompanyModel.id == current_company.id)
-                .values(**company_data)
+                update(UserModel)
+                .where(UserModel.id == current_user.id)
+                .values(**user_data)
             )
 
         await db.commit()
 
         # Возвращаем обновлённые данные
         result = await db.execute(
-            select(CompanyModel)
-            .options(joinedload(CompanyModel.account))
-            .where(CompanyModel.id == current_company.id)
+            select(UserModel)
+            .options(joinedload(UserModel.account))
+            .where(UserModel.id == current_user.id)
         )
         return result.scalar_one()
 
@@ -114,24 +112,23 @@ async def update_company(
         await db.rollback()
         raise HTTPException(400, detail="Ошибка обновления данных")
 
-
 @router.delete(
     "/me",
     status_code=204,
-    summary="DELETE запрос на самоликвидацию",
+    summary="DELETE пользователя",
     description=(
-            "Роскомнадзор аккаунта"
+            "Аналогично компании"
     )
 )
 async def delete_company(
-        current_company: CompanyModel = Depends(get_current_company),
+        current_user: UserModel = Depends(get_current_user),
         db: AsyncSession = Depends(get_db)
 ):
     try:
-        account_id = current_company.account_id
+        account_id = current_user.account_id
 
-        # Удаление компании
-        await db.delete(current_company)
+        # Удаление пользователя
+        await db.delete(current_user)
 
         # Удаление аккаунта
         await db.execute(
@@ -168,20 +165,21 @@ async def delete_company(
             detail=f"Непредвиденная ошибка: {str(e)}"
         )
 
+
 @router.post(
     "/change-password",
     summary="POST запрос на смену пароля",
     description=(
-            "Возможна проверка на ввод текущего пароля, после чего можно новый вводить"
+            "Как в компании (можно и в auth роут кинуть, но, думаю, и тут сойдёт"
     )
 )
-async def change_company_password(
+async def change_user_password(
         request: ChangePasswordRequest,
-        current_company: CompanyModel = Depends(get_current_company),
+        current_user: UserModel = Depends(get_current_user),
         db: AsyncSession = Depends(get_db)
 ):
     # Проверка текущего пароля
-    if not verify_password(request.old_password, current_company.account.hashed_password):
+    if not verify_password(request.old_password, current_user.account.hashed_password):
         raise HTTPException(400, detail="Неверный текущий пароль")
 
     # Хэширование нового пароля
@@ -190,7 +188,7 @@ async def change_company_password(
     # Обновление пароля
     await db.execute(
         update(Account_Model)
-        .where(Account_Model.id == current_company.account_id)
+        .where(Account_Model.id == current_user.account_id)
         .values(hashed_password=new_hashed_password)
     )
     await db.commit()
@@ -198,34 +196,35 @@ async def change_company_password(
     return {"message": "Пароль успешно изменён"}
 
 
+
 @router.post(
-    "/upload-logo",
-    summary="POST запрос на смену/добавление лого",
+    "/upload-photo",
+    summary="POST запрос на добавление фото в аккаунт пользователя",
     description=(
-            "Тут работа уже чисто с фото"
+            "Аналогия с компанией"
     )
 )
-async def upload_logo(
+async def upload_photo(
         file: UploadFile = File(...),
-        current_company: CompanyModel = Depends(get_current_company),
+        current_user: UserModel = Depends(get_current_user),
         db: AsyncSession = Depends(get_db)
 ):
-    # Формирование безопасного имени файла
-    safe_name = transliterate(current_company.name)
-    file_extension = Path(file.filename).suffix
-    file_path = f"static/companies/{current_company.id}_{safe_name}{file_extension}"
+    # Формируем безопасное имя файла на основе полного имени пользователя
+    safe_name = transliterate(current_user.fullname)
+    file_extension = Path(file.filename).suffix  # Получаем расширение файла
+    file_path = f"static/users/{current_user.id}_{safe_name}{file_extension}"
 
-    # Если ранее был установлен логотип, удаляем старый файл
-    if current_company.logo_url:
-        old_file_path = current_company.logo_url.lstrip("/")
+    # Если у пользователя уже установлен путь до фото, удаляем старый файл
+    if current_user.photo_url:
+        old_file_path = current_user.photo_url.lstrip("/")
         if os.path.exists(old_file_path):
             try:
                 os.remove(old_file_path)
             except Exception as e:
-                # Можно залогировать ошибку удаления, но не прерывать процесс обновления
+                # Можно залогировать ошибку, но не прерывать обновление
                 print(f"Ошибка удаления старого файла {old_file_path}: {e}")
 
-    # Создаем папку, если её нет
+    # Создаём директорию, если её нет
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
     # Асинхронное сохранение файла
@@ -236,12 +235,12 @@ async def upload_logo(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ошибка сохранения файла: {str(e)}")
 
-    # Обновляем путь логотипа в БД
+    # Обновляем путь до фото в базе данных (предполагается, что поле называется photo_url)
     await db.execute(
-        update(CompanyModel)
-        .where(CompanyModel.id == current_company.id)
-        .values(logo_url=f"/{file_path}")
+        update(UserModel)
+        .where(UserModel.id == current_user.id)
+        .values(photo_url=f"/{file_path}")
     )
     await db.commit()
 
-    return {"logo_url": f"/{file_path}"}
+    return {"photo_url": f"/{file_path}"}

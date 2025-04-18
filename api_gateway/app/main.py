@@ -59,6 +59,7 @@ SERVICE_URLS = {
     "auth": "http://localhost:8001",
     "deal": "http://localhost:8002",
     "rating": "http://localhost:8003",
+    "lk": "http://localhost:8004",
     "admin": "http://localhost:8005"
 }
 
@@ -170,11 +171,11 @@ async def auth_proxy(request: Request, path: str):
     description=(
         "Переадресация на ЛК пользователя\n"
         "Поддерживаемые пути:\n"
-        "- GET /api/users/me — просмотр данных текущего пользователя\n"
-        "- PUT /api/users/me — обновление данных текущего пользователя\n"
-        "- DELETE /api/users/me — удаление текущего пользователя\n"
-        "- POST /api/users/change-password — смена пароля\n"
-        "- POST /api/users/upload-photo — обновление фото\n"
+        "- GET /api/user/me — просмотр данных текущего пользователя\n"
+        "- PUT /api/user/me — обновление данных текущего пользователя\n"
+        "- DELETE /api/user/me — удаление текущего пользователя\n"
+        "- POST /api/user/change-password — смена пароля\n"
+        "- POST /api/user/upload-photo — обновление фото\n"
     )
 )
 async def users_proxy(
@@ -188,7 +189,7 @@ async def users_proxy(
         raise HTTPException(status_code=403, detail="Невалидный CSRF токен")
 
     async with AsyncClient() as client:
-        url = f"{SERVICE_URLS['auth']}/users/{path}"
+        url = f"{SERVICE_URLS['lk']}/user/{path}"
         response = await client.request(
             method=request.method,
             url=url,
@@ -215,11 +216,11 @@ async def users_proxy(
     description=(
         "Переадресация на ЛК компании\n"
         "Поддерживаемые пути:\n"
-        "- GET /api/companies/me — просмотр данных текущей компании\n"
-        "- PUT /api/companies/me — обновление данных текущей компании\n"
-        "- DELETE /api/companies/me — удаление текущей компании\n"
-        "- POST /api/companies/change-password — смена пароля\n"
-        "- POST /api/companies/upload-logo — обновление фото\n"
+        "- GET /api/company/me — просмотр данных текущей компании\n"
+        "- PUT /api/company/me — обновление данных текущей компании\n"
+        "- DELETE /api/company/me — удаление текущей компании\n"
+        "- POST /api/company/change-password — смена пароля\n"
+        "- POST /api/company/upload-logo — обновление фото\n"
     )
 )
 async def companies_proxy(
@@ -233,7 +234,7 @@ async def companies_proxy(
         raise HTTPException(status_code=403, detail="Невалидный CSRF токен")
 
     async with AsyncClient() as client:
-        url = f"{SERVICE_URLS['auth']}/companies/{path}"
+        url = f"{SERVICE_URLS['lk']}/company/{path}"
         response = await client.request(
             method=request.method,
             url=url,
@@ -250,6 +251,46 @@ async def companies_proxy(
             raise HTTPException(
                 status_code=500,
                 detail=f"Auth service error: {response.text}"
+            )
+
+# Проксирование запросов к Rating Service
+@app.api_route(
+    "/api/rating/{path:path}",
+    methods=["GET"],
+    summary="Проксирование запросов к Rating Service",
+    description=(
+        "Переадресация запросов к Rating Service для получения рейтингов компаний.\n"
+        "Поддерживаемые пути:\n"
+        "- GET /api/rating/regions — получение списка регионов\n"
+        "- GET /api/rating/industries — получение списка отраслей\n"
+        "- GET /api/rating/companies — получение списка компаний с фильтрацией (требуется аутентификация)\n"
+        "- GET /api/rating/companies/{company_id} — получение подробной информации о компании\n"
+        "- GET /api/rating/ranking-vikor-companies — получение рейтинга компаний по VIKOR\n"
+    )
+)
+async def rating_proxy(
+    request: Request,
+    path: str,
+):
+
+    async with AsyncClient() as client:
+        url = f"{SERVICE_URLS['rating']}/rating/{path}"
+        response = await client.request(
+            method=request.method,
+            url=url,
+            headers=dict(request.headers),
+            params=dict(request.query_params),
+            content=await request.body()
+        )
+        # Логирование для отладки
+        logger.info(f"Response from rating service: {response.status_code}, {response.text}")
+
+        try:
+            return response.json()
+        except json.JSONDecodeError:
+            raise HTTPException(
+                status_code=response.status_code,
+                detail=f"Rating service error: {response.text}"
             )
 
 # Проксирование запросов к Deal_Model Service

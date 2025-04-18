@@ -8,9 +8,14 @@ from shared.db.models import deal_consumers
 class Deal_Model(Base):
     __tablename__ = "deals"
 
-    id = Column(Integer, primary_key=True, index=True)
-    name_deal = Column(String(255), nullable=False, index=True)
-    seller_id = Column(Integer, ForeignKey("accounts.id", ondelete="SET NULL"), nullable=True)
+    id = Column(Integer, primary_key=True, index=True)  # Уже индексирован (PK)
+    name_deal = Column(String(255), nullable=False, index=True)  # Уже индексирован
+    seller_id = Column(
+        Integer,
+        ForeignKey("accounts.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True  # Индекс для JOIN и GROUP BY
+    )
     seller_price = Column(Numeric(12,2), nullable=False)
     YAMS_percent = Column(Numeric(12,2), nullable=True)
     total_cost = Column(Numeric(12,2), nullable=True)
@@ -27,7 +32,12 @@ class Deal_Model(Base):
         server_default=func.timezone('Europe/Moscow', func.now()),
         nullable=False
     )
-    deal_branch_id = Column(Integer, ForeignKey("deal_branch.id", ondelete="SET NULL"), nullable=True)
+    deal_branch_id = Column(
+        Integer,
+        ForeignKey("deal_branch.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True  # Индекс для JOIN и array_agg
+    )
     deal_type_id = Column(Integer, ForeignKey("deal_type.id", ondelete="SET NULL"), nullable=True)
 
     # Связи
@@ -38,7 +48,7 @@ class Deal_Model(Base):
     messages = relationship("Message_Model", back_populates="deal", cascade="all, delete-orphan")
     consumers = relationship(
         "Account_Model",
-        secondary="deal_consumers",  # Указываем имя таблицы как строку
+        secondary="deal_consumers",
         back_populates="purchased_deals",
         order_by="deal_consumers.c.created_at"
     )

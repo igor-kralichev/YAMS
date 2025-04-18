@@ -6,7 +6,9 @@ from pathlib import Path
 
 
 from fastapi import APIRouter, Depends, HTTPException, status, Form, UploadFile, File
-from sqlalchemy import select, func
+from fastapi_pagination import Page, add_pagination
+from fastapi_pagination.ext.sqlalchemy import paginate
+from sqlalchemy import select, func, case
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
 
@@ -45,7 +47,7 @@ async def get_regions(db: AsyncSession = Depends(get_db)):
     response_model=list[dict],
     summary="GET на получение деталей сделки",
     description=(
-        "Активно/забронировано/продано и т.д., см в seed_deal_details"
+        "Активно/Продано и т.д., см в seed_deal_details"
     )
 )
 async def get_deal_details(db: AsyncSession = Depends(get_db)):
@@ -82,34 +84,29 @@ async def get_deal_types(db: AsyncSession = Depends(get_db)):
 
 @router.get(
     "/list",
-    response_model=List[Deal],
+    response_model=Page[Deal],
     summary="GET на получение сделок",
     description=(
-        "Тут указано по дефолту 50 сделок на страницу"
+        "Возвращает сделки по 50 на страницу. Есть фильтрация по региону, типу сделки, отрасли сделки и поиск. "
+        "Сделки сортируются с приоритетом по региону текущего пользователя, если регион указан."
     )
 )
 async def list_deals(
-        page: int = 1,
-        page_size: int = 50,
-        region_id: Optional[int] = None,
-        deal_branch_id: Optional[int] = None,
-        deal_type_id: Optional[int] = None,
-        search: Optional[str] = None,
-        db: AsyncSession = Depends(get_db)
+    region_id: Optional[int] = None,
+    deal_branch_id: Optional[int] = None,
+    deal_type_id: Optional[int] = None,
+    search: Optional[str] = None,
+    sort_by_region: bool = True,
+    db: AsyncSession = Depends(get_db),
+    current_account: Account_Model = Depends(get_current_account)
 ):
-    if page < 1:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Страниц должно быть >= 1")
-    if page_size < 1 or page_size > 100:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="На странице от 1 до 100 сделок")
-
-    offset = (page - 1) * page_size
     stmt = select(Deal_Model).options(
         joinedload(Deal_Model.region),
         joinedload(Deal_Model.deal_branch),
         joinedload(Deal_Model.deal_type)
     )
 
-    # Применяем фильтры, если они заданы
+    # Применяем фильтры
     if region_id is not None:
         stmt = stmt.where(Deal_Model.region_id == region_id)
     if deal_branch_id is not None:
@@ -119,25 +116,33 @@ async def list_deals(
     if deal_type_id is not None:
         stmt = stmt.where(Deal_Model.deal_type_id == deal_type_id)
 
-    stmt = stmt.order_by(Deal_Model.created_at.desc()).offset(offset).limit(page_size)
-    result = await db.execute(stmt)
-    deals = result.scalars().all()
+    # Сортировка по региону текущего пользователя
+    if sort_by_region and current_account.region_id is not None:
+        is_same_region = case(
+            (Deal_Model.region_id == current_account.region_id, 1),
+            else_=0
+        )
+        stmt = stmt.order_by(is_same_region.desc(), Deal_Model.created_at.desc())
+    else:
+        stmt = stmt.order_by(Deal_Model.created_at.desc())
 
-    # Подсчитываем количество покупок для каждой сделки
-    deal_ids = [deal.id for deal in deals]
+    # Пагинация
+    deals_page = await paginate(db, stmt)
+
+    # Подсчитываем количество покупок
+    deal_ids = [deal.id for deal in deals_page.items]
+    order_counts = {}
     if deal_ids:
-        # Выполняем один запрос для подсчёта покупок для всех сделок
         count_stmt = (
             select(DealConsumers.c.deal_id, func.count().label("order_count"))
             .where(DealConsumers.c.deal_id.in_(deal_ids))
             .group_by(DealConsumers.c.deal_id)
         )
         count_result = await db.execute(count_stmt)
-        order_counts = dict(count_result.all())  # {deal_id: order_count}
-    else:
-        order_counts = {}
+        order_counts = dict(count_result.all())
 
-    return [
+    # Формируем ответ
+    deals_page.items = [
         Deal(
             id=deal.id,
             name_deal=deal.name_deal,
@@ -153,10 +158,15 @@ async def list_deals(
             deal_details_id=deal.deal_details_id,
             deal_branch_id=deal.deal_branch_id,
             created_at=deal.created_at,
-            order_count=order_counts.get(deal.id, 0)  # Количество покупок, 0 если нет записей
+            order_count=order_counts.get(deal.id, 0)
         )
-        for deal in deals
+        for deal in deals_page.items
     ]
+
+    return deals_page
+
+# Добавляем пагинацию к роутеру
+add_pagination(router)
 
 @router.get(
     "/view-deal/{deal_id}",

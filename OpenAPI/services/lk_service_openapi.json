@@ -1,24 +1,49 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Auth Service",
-    "description": "Сервис аутентификации",
+    "title": "Lk Service",
+    "description": "Сервис управления аккаунтами",
     "version": "0.1.0"
   },
   "paths": {
-    "/auth/register/user": {
-      "post": {
+    "/user/me": {
+      "get": {
         "tags": [
-          "auth"
+          "user"
         ],
-        "summary": "POST запрос на регистрацию для пользователя",
-        "description": "Тут добавляется инфа в 2 таблицы: accounts общая для авторизации, остальное в users",
-        "operationId": "register_user_auth_register_user_post",
+        "summary": "GET на просмотр данных пользователя",
+        "description": "ЛК пользователя",
+        "operationId": "read_users_me_user_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "PUT запрос на изменение данных пользователя",
+        "description": "Также как с компанией, т.е. без фото",
+        "operationId": "update_user_user_me_put",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserCreate"
+                "$ref": "#/components/schemas/UserUpdate"
               }
             }
           },
@@ -45,22 +70,160 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "DELETE пользователя",
+        "description": "Аналогично компании",
+        "operationId": "delete_company_user_me_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     },
-    "/auth/register/company": {
+    "/user/change-password": {
       "post": {
         "tags": [
-          "auth"
+          "user"
         ],
-        "summary": "POST запрос на регистрацию для компании",
-        "description": "Аналогично users, только для компании",
-        "operationId": "register_company_auth_register_company_post",
+        "summary": "POST запрос на смену пароля",
+        "description": "Как в компании (можно и в auth роут кинуть, но, думаю, и тут сойдёт",
+        "operationId": "change_user_password_user_change_password_post",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CompanyCreate"
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/user/upload-photo": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "POST запрос на добавление фото в аккаунт пользователя",
+        "description": "Аналогия с компанией",
+        "operationId": "upload_photo_user_upload_photo_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_photo_user_upload_photo_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/company/me": {
+      "get": {
+        "tags": [
+          "company"
+        ],
+        "summary": "GET запрос на просмотр данных о компании, которая авторизовалась",
+        "description": "Возвращает данные текущей компании, включая названия партнёрских компаний",
+        "operationId": "read_companies_me_company_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Company"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "company"
+        ],
+        "summary": "PUT запрос на обновление данных",
+        "description": "Обновить данные по компании в ЛК (лого в другом месте обновляем)",
+        "operationId": "update_company_company_me_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyUpdate"
               }
             }
           },
@@ -87,103 +250,45 @@
               }
             }
           }
-        }
-      }
-    },
-    "/auth/login": {
-      "post": {
-        "tags": [
-          "auth"
-        ],
-        "summary": "POST запрос на авторизацию",
-        "description": "Ищет по email в accounts и выбирает, кем будет пользователь",
-        "operationId": "login_auth_login_post",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_login_auth_login_post"
-              }
-            }
-          },
-          "required": true
         },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/verify-email": {
-      "get": {
-        "tags": [
-          "auth"
-        ],
-        "summary": "GET запрос на подтверждение почты",
-        "description": "После регистрации на почту приходит письмо, если там нажмать кнопку, то сюда перекинети подтвердит верификацию аккаунта",
-        "operationId": "verify_email_auth_verify_email_get",
-        "parameters": [
+        "security": [
           {
-            "name": "token",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Token"
-            }
+            "OAuth2PasswordBearer": []
           }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "company"
         ],
+        "summary": "DELETE запрос на самоликвидацию",
+        "description": "Роскомнадзор аккаунта",
+        "operationId": "delete_company_company_me_delete",
         "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
+          "204": {
+            "description": "Successful Response"
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     },
-    "/auth/verify-token": {
+    "/company/change-password": {
       "post": {
         "tags": [
-          "auth"
+          "company"
         ],
-        "summary": "POST запрос на проверку токена",
-        "description": "Проверка валидности токена",
-        "operationId": "verify_token_endpoint_auth_verify_token_post",
+        "summary": "POST запрос на смену пароля",
+        "description": "Возможна проверка на ввод текущего пароля, после чего можно новый вводить",
+        "operationId": "change_company_password_company_change_password_post",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Body_verify_token_endpoint_auth_verify_token_post"
+                "$ref": "#/components/schemas/ChangePasswordRequest"
               }
             }
           },
@@ -208,28 +313,32 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     },
-    "/auth/update-access-token": {
+    "/company/upload-logo": {
       "post": {
         "tags": [
-          "auth"
+          "company"
         ],
-        "summary": "POST запрос на обновление access_token",
-        "description": "Берёт refresh_token пользователя из бд и присваивает ему новый access_token",
-        "operationId": "refresh_token_auth_update_access_token_post",
-        "parameters": [
-          {
-            "name": "refresh_token",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Refresh Token"
+        "summary": "POST запрос на смену/добавление лого",
+        "description": "Тут работа уже чисто с фото",
+        "operationId": "upload_logo_company_upload_logo_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_logo_company_upload_logo_post"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -249,23 +358,117 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
       }
     },
-    "/auth/logout": {
-      "post": {
+    "/company/interacted-companies": {
+      "get": {
         "tags": [
-          "auth"
+          "company"
         ],
-        "summary": "POST запрос выход из аккаунта",
-        "description": "Удаляет refresh_token из бд для этого пользователя",
-        "operationId": "logout_auth_logout_post",
+        "summary": "Получение компаний, с которыми взаимодействовала текущая компания",
+        "description": "Возвращает уникальные компании-покупатели сделок текущей компании",
+        "operationId": "get_interacted_companies_company_interacted_companies_get",
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Get Interacted Companies Company Interacted Companies Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/company/set-partner-companies": {
+      "post": {
+        "tags": [
+          "company"
+        ],
+        "summary": "Выбор до 3 лучших компаний",
+        "description": "Сохраняет до 3 ID компаний в partner_companies текущей компании",
+        "operationId": "set_partner_companies_company_set_partner_companies_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array",
+                "title": "Partner Ids",
+                "description": "Список ID компаний (от 0 до 3)"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Company"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/company/partner-companies": {
+      "get": {
+        "tags": [
+          "company"
+        ],
+        "summary": "Получение названий партнёрских компаний",
+        "description": "Возвращает названия компаний из partner_companies текущей компании",
+        "operationId": "get_partner_companies_company_partner_companies_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Get Partner Companies Company Partner Companies Get"
+                }
               }
             }
           }
@@ -369,120 +572,51 @@
         ],
         "title": "Account"
       },
-      "AccountCreate": {
+      "Body_upload_logo_company_upload_logo_post": {
         "properties": {
-          "email": {
+          "file": {
             "type": "string",
-            "format": "email",
-            "title": "Email",
-            "description": "Email для авторизации"
-          },
-          "phone_num": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Phone Num",
-            "description": "Телефон (11 цифр, если указан)"
-          },
-          "region_id": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Region Id",
-            "description": "ID региона"
-          },
-          "password": {
-            "type": "string",
-            "title": "Password",
-            "description": "Пароль для аккаунта"
+            "format": "binary",
+            "title": "File"
           }
         },
         "type": "object",
         "required": [
-          "email",
-          "password"
+          "file"
         ],
-        "title": "AccountCreate"
+        "title": "Body_upload_logo_company_upload_logo_post"
       },
-      "Body_login_auth_login_post": {
+      "Body_upload_photo_user_upload_photo_post": {
         "properties": {
-          "grant_type": {
-            "anyOf": [
-              {
-                "type": "string",
-                "pattern": "password"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Grant Type"
-          },
-          "username": {
+          "file": {
             "type": "string",
-            "title": "Username"
-          },
-          "password": {
-            "type": "string",
-            "title": "Password"
-          },
-          "scope": {
-            "type": "string",
-            "title": "Scope",
-            "default": ""
-          },
-          "client_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Client Id"
-          },
-          "client_secret": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Client Secret"
+            "format": "binary",
+            "title": "File"
           }
         },
         "type": "object",
         "required": [
-          "username",
-          "password"
+          "file"
         ],
-        "title": "Body_login_auth_login_post"
+        "title": "Body_upload_photo_user_upload_photo_post"
       },
-      "Body_verify_token_endpoint_auth_verify_token_post": {
+      "ChangePasswordRequest": {
         "properties": {
-          "token": {
+          "old_password": {
             "type": "string",
-            "title": "Token"
+            "title": "Old Password"
+          },
+          "new_password": {
+            "type": "string",
+            "title": "New Password"
           }
         },
         "type": "object",
         "required": [
-          "token"
+          "old_password",
+          "new_password"
         ],
-        "title": "Body_verify_token_endpoint_auth_verify_token_post"
+        "title": "ChangePasswordRequest"
       },
       "Company": {
         "properties": {
@@ -736,12 +870,18 @@
         ],
         "title": "Company"
       },
-      "CompanyCreate": {
+      "CompanyUpdate": {
         "properties": {
           "name": {
-            "type": "string",
-            "title": "Name",
-            "description": "Название компании"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
           },
           "description": {
             "anyOf": [
@@ -752,8 +892,7 @@
                 "type": "null"
               }
             ],
-            "title": "Description",
-            "description": "Описание компании"
+            "title": "Description"
           },
           "slogan": {
             "anyOf": [
@@ -764,8 +903,7 @@
                 "type": "null"
               }
             ],
-            "title": "Slogan",
-            "description": "Слоган"
+            "title": "Slogan"
           },
           "legal_address": {
             "anyOf": [
@@ -776,8 +914,7 @@
                 "type": "null"
               }
             ],
-            "title": "Legal Address",
-            "description": "Юридический адрес"
+            "title": "Legal Address"
           },
           "actual_address": {
             "anyOf": [
@@ -788,8 +925,7 @@
                 "type": "null"
               }
             ],
-            "title": "Actual Address",
-            "description": "Фактический адрес"
+            "title": "Actual Address"
           },
           "logo_url": {
             "anyOf": [
@@ -800,8 +936,7 @@
                 "type": "null"
               }
             ],
-            "title": "Logo Url",
-            "description": "Путь до логотипа"
+            "title": "Logo Url"
           },
           "employees": {
             "anyOf": [
@@ -812,8 +947,7 @@
                 "type": "null"
               }
             ],
-            "title": "Employees",
-            "description": "Количество сотрудников"
+            "title": "Employees"
           },
           "year_founded": {
             "anyOf": [
@@ -825,8 +959,7 @@
                 "type": "null"
               }
             ],
-            "title": "Year Founded",
-            "description": "Год основания"
+            "title": "Year Founded"
           },
           "website": {
             "anyOf": [
@@ -837,8 +970,7 @@
                 "type": "null"
               }
             ],
-            "title": "Website",
-            "description": "Ссылка на сайт"
+            "title": "Website"
           },
           "inn": {
             "anyOf": [
@@ -849,8 +981,7 @@
                 "type": "null"
               }
             ],
-            "title": "Inn",
-            "description": "ИНН (10 цифр)"
+            "title": "Inn"
           },
           "kpp": {
             "anyOf": [
@@ -861,8 +992,7 @@
                 "type": "null"
               }
             ],
-            "title": "Kpp",
-            "description": "КПП (9 цифр)"
+            "title": "Kpp"
           },
           "ogrn": {
             "anyOf": [
@@ -873,8 +1003,7 @@
                 "type": "null"
               }
             ],
-            "title": "Ogrn",
-            "description": "ОГРН (13 цифр)"
+            "title": "Ogrn"
           },
           "oktmo": {
             "anyOf": [
@@ -885,8 +1014,7 @@
                 "type": "null"
               }
             ],
-            "title": "Oktmo",
-            "description": "ОКТМО (8 или 11 цифр)"
+            "title": "Oktmo"
           },
           "okpo": {
             "anyOf": [
@@ -897,8 +1025,7 @@
                 "type": "null"
               }
             ],
-            "title": "Okpo",
-            "description": "ОКПО (8 цифр)"
+            "title": "Okpo"
           },
           "director_full_name": {
             "anyOf": [
@@ -909,8 +1036,7 @@
                 "type": "null"
               }
             ],
-            "title": "Director Full Name",
-            "description": "ФИО директора"
+            "title": "Director Full Name"
           },
           "social_media_links": {
             "anyOf": [
@@ -924,8 +1050,7 @@
                 "type": "null"
               }
             ],
-            "title": "Social Media Links",
-            "description": "Ссылки на соцсети"
+            "title": "Social Media Links"
           },
           "partner_companies": {
             "anyOf": [
@@ -939,24 +1064,45 @@
                 "type": "null"
               }
             ],
-            "title": "Partner Companies",
-            "description": "ID партнёрских компаний (до 3)"
+            "title": "Partner Companies"
           },
-          "account": {
-            "allOf": [
+          "email": {
+            "anyOf": [
               {
-                "$ref": "#/components/schemas/AccountCreate"
+                "type": "string",
+                "format": "email"
+              },
+              {
+                "type": "null"
               }
             ],
-            "description": "Данные аккаунта компании"
+            "title": "Email"
+          },
+          "phone_num": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone Num"
+          },
+          "region_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Id"
           }
         },
         "type": "object",
-        "required": [
-          "name",
-          "account"
-        ],
-        "title": "CompanyCreate"
+        "title": "CompanyUpdate"
       },
       "HTTPValidationError": {
         "properties": {
@@ -998,12 +1144,18 @@
         ],
         "title": "User"
       },
-      "UserCreate": {
+      "UserUpdate": {
         "properties": {
           "fullname": {
-            "type": "string",
-            "title": "Fullname",
-            "description": "ФИО пользователя"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fullname"
           },
           "photo_url": {
             "anyOf": [
@@ -1014,24 +1166,45 @@
                 "type": "null"
               }
             ],
-            "title": "Photo Url",
-            "description": "Путь до фото"
+            "title": "Photo Url"
           },
-          "account": {
-            "allOf": [
+          "email": {
+            "anyOf": [
               {
-                "$ref": "#/components/schemas/AccountCreate"
+                "type": "string",
+                "format": "email"
+              },
+              {
+                "type": "null"
               }
             ],
-            "description": "Данные для создания аккаунта пользователя"
+            "title": "Email"
+          },
+          "phone_num": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone Num"
+          },
+          "region_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Id"
           }
         },
         "type": "object",
-        "required": [
-          "fullname",
-          "account"
-        ],
-        "title": "UserCreate"
+        "title": "UserUpdate"
       },
       "ValidationError": {
         "properties": {

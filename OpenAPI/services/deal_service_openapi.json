@@ -38,7 +38,7 @@
           "deals"
         ],
         "summary": "GET на получение деталей сделки",
-        "description": "Активно/забронировано/продано и т.д., см в seed_deal_details",
+        "description": "Активно/Продано и т.д., см в seed_deal_details",
         "operationId": "get_deal_details_deal_deal_details_get",
         "responses": {
           "200": {
@@ -116,29 +116,14 @@
           "deals"
         ],
         "summary": "GET на получение сделок",
-        "description": "Тут указано по дефолту 50 сделок на страницу",
+        "description": "Возвращает сделки по 50 на страницу. Есть фильтрация по региону, типу сделки, отрасли сделки и поиск. Сделки сортируются с приоритетом по региону текущего пользователя, если регион указан.",
         "operationId": "list_deals_deal_list_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
         "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1,
-              "title": "Page"
-            }
-          },
-          {
-            "name": "page_size",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 50,
-              "title": "Page Size"
-            }
-          },
           {
             "name": "region_id",
             "in": "query",
@@ -202,6 +187,43 @@
               ],
               "title": "Search"
             }
+          },
+          {
+            "name": "sort_by_region",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Sort By Region"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Page size",
+              "default": 50,
+              "title": "Size"
+            },
+            "description": "Page size"
           }
         ],
         "responses": {
@@ -210,11 +232,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Deal"
-                  },
-                  "title": "Response List Deals Deal List Get"
+                  "$ref": "#/components/schemas/Page_Deal_"
                 }
               }
             }
@@ -1078,6 +1096,74 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "Page_Deal_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Deal"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size"
+          },
+          "pages": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "size",
+          "pages"
+        ],
+        "title": "Page[Deal]"
       },
       "ValidationError": {
         "properties": {

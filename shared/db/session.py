@@ -5,7 +5,7 @@ from shared.core.config import settings
 # Используем create_async_engine для асинхронного движка
 engine = create_async_engine(
     settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://"),  # Для asyncpg
-    echo=True
+    echo=False
 )
 
 # Настраиваем асинхронную сессию

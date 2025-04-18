@@ -217,6 +217,7 @@ async def users_proxy(
         "Переадресация на ЛК компании\n"
         "Поддерживаемые пути:\n"
         "- GET /api/company/me — просмотр данных текущей компании\n"
+        "- GET /api/company/me/top-purchase — вывод данных о топ-месте в рейтинге\n"
         "- PUT /api/company/me — обновление данных текущей компании\n"
         "- DELETE /api/company/me — удаление текущей компании\n"
         "- POST /api/company/change-password — смена пароля\n"
@@ -256,7 +257,7 @@ async def companies_proxy(
 # Проксирование запросов к Rating Service
 @app.api_route(
     "/api/rating/{path:path}",
-    methods=["GET"],
+    methods=["GET", "POST"],
     summary="Проксирование запросов к Rating Service",
     description=(
         "Переадресация запросов к Rating Service для получения рейтингов компаний.\n"
@@ -266,12 +267,18 @@ async def companies_proxy(
         "- GET /api/rating/companies — получение списка компаний с фильтрацией (требуется аутентификация)\n"
         "- GET /api/rating/companies/{company_id} — получение подробной информации о компании\n"
         "- GET /api/rating/ranking-vikor-companies — получение рейтинга компаний по VIKOR\n"
+        "- POST /api/rating/buy-top — покупка топ-места в рейтинге посуточно\n"
     )
 )
 async def rating_proxy(
     request: Request,
     path: str,
+    csrf: CsrfProtect = Depends(get_csrf_protect)
 ):
+    try:
+        await csrf.validate_csrf(request)
+    except CsrfProtectError:
+        raise HTTPException(status_code=403, detail="Невалидный CSRF токен")
 
     async with AsyncClient() as client:
         url = f"{SERVICE_URLS['rating']}/rating/{path}"

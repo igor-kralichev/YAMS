@@ -63,8 +63,8 @@
         "tags": [
           "rating"
         ],
-        "summary": "Получение списка компаний с фильтрацией",
-        "description": "Выводит компании по 30 на страницу, сначала из региона пользователя, затем остальные, с фильтрацией по региону и индустрии",
+        "summary": "Получение списка компаний с фильтрацией и учетом топ-позиций",
+        "description": "Выводит компании по 30 на страницу, сначала с активной топ-позицией (по убыванию time_stop), затем по региону пользователя и средней оценке, с фильтрацией по региону и индустрии",
         "operationId": "get_companies_rating_companies_get",
         "security": [
           {
@@ -208,8 +208,8 @@
         "tags": [
           "rating"
         ],
-        "summary": "Рейтинг компаний по VIKOR",
-        "description": "Выводит компании по 30 на страницу, ранжированные по 5 критериям с использованием VIKOR",
+        "summary": "Рейтинг компаний по VIKOR с учетом топ-позиций",
+        "description": "Выводит компании по 30 на страницу, сначала компании с активной топ-позицией (по убыванию time_stop), затем по VIKOR",
         "operationId": "get_vikor_companies_rating_ranking_vikor_companies_get",
         "parameters": [
           {
@@ -263,10 +263,144 @@
           }
         }
       }
+    },
+    "/rating/buy-top": {
+      "post": {
+        "tags": [
+          "rating"
+        ],
+        "summary": "Покупка топ-позиции для компании",
+        "description": "Покупает топ-позицию на указанное количество суток (500 руб./сутки). Суммирует время, если топ активен, или обновляет время окончания, если топ неактивен.",
+        "operationId": "buy_top_position_rating_buy_top_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BuyingTopCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuyingTopPublic"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
+      "BuyingTopCreate": {
+        "properties": {
+          "id_company": {
+            "type": "integer",
+            "title": "Id Company",
+            "description": "ID компании"
+          },
+          "days": {
+            "type": "integer",
+            "title": "Days",
+            "description": "Количество суток для топ-позиции"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_company",
+          "days"
+        ],
+        "title": "BuyingTopCreate",
+        "description": "Схема для создания записи"
+      },
+      "BuyingTopPublic": {
+        "properties": {
+          "id_company": {
+            "type": "integer",
+            "title": "Id Company",
+            "description": "ID компании"
+          },
+          "days": {
+            "type": "integer",
+            "title": "Days",
+            "description": "Количество суток для топ-позиции"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id",
+            "description": "ID записи"
+          },
+          "time_stop": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Time Stop",
+            "description": "Время окончания топ-позиции"
+          },
+          "total_spent": {
+            "type": "number",
+            "title": "Total Spent",
+            "description": "Общая сумма потраченных денег"
+          },
+          "purchase_count": {
+            "type": "integer",
+            "title": "Purchase Count",
+            "description": "Количество покупок"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At",
+            "description": "Время создания"
+          },
+          "company_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Company Name",
+            "description": "Название компании"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_company",
+          "days",
+          "id",
+          "time_stop",
+          "total_spent",
+          "purchase_count",
+          "created_at",
+          "company_name"
+        ],
+        "title": "BuyingTopPublic",
+        "description": "Схема для публичного ответа API"
+      },
       "CompanyDetailSchema": {
         "properties": {
           "id": {
@@ -490,6 +624,11 @@
             },
             "type": "array",
             "title": "Partners"
+          },
+          "is_top": {
+            "type": "boolean",
+            "title": "Is Top",
+            "description": "Флаг топ-позиции"
           }
         },
         "type": "object",
@@ -501,7 +640,8 @@
           "director_full_name",
           "average_rating",
           "industries",
-          "partners"
+          "partners",
+          "is_top"
         ],
         "title": "CompanyShortSchema"
       },
@@ -552,6 +692,11 @@
           "vikor_score": {
             "type": "number",
             "title": "Vikor Score"
+          },
+          "is_top": {
+            "type": "boolean",
+            "title": "Is Top",
+            "description": "Флаг топ-позиции"
           }
         },
         "type": "object",
@@ -563,7 +708,8 @@
           "feedback_count",
           "order_count",
           "repeat_customer_orders",
-          "vikor_score"
+          "vikor_score",
+          "is_top"
         ],
         "title": "CompanyVikorSchema"
       },

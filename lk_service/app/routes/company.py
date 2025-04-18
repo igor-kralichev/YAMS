@@ -2,21 +2,22 @@
 import os
 import secrets
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import aiofiles
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, BackgroundTasks, status, Body
 from pydantic import Field
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, delete
+from sqlalchemy import select, update, delete, func
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from sqlalchemy.orm import joinedload
 
 from auth_service.app.routes.auth import send_verification_email
+from rating_service.app.schemas.ratings import BuyingTopPublic
 from shared.services.transliterate import transliterate
 from shared.core.security import get_password_hash, verify_password
-from shared.db.models import Company_Model as CompanyModel, Account_Model, Deal_Model, deal_consumers
+from shared.db.models import Company_Model as CompanyModel, Account_Model, Deal_Model, deal_consumers, BuyTop
 from shared.db.schemas import Company as CompanySchema
 from shared.services.auth import get_current_company
 from shared.db.schemas.company import CompanyUpdate, ChangePasswordRequest
@@ -380,3 +381,26 @@ async def get_partner_companies(
 
     # Возвращаем список словарей с id и name
     return [{"id": row[0], "name": row[1]} for row in companies.all()]
+
+@router.get(
+    "/me/top-purchase",
+    response_model=Optional[BuyingTopPublic],
+    summary="GET запрос на просмотр данных о покупке топ-позиции",
+    description="Возвращает данные о покупке топ-позиции текущей компании: если активна — подробности, иначе — дата окончания, сумма и количество покупок"
+)
+async def get_top_purchase(
+    current_company: CompanyModel = Depends(get_current_company),
+    db: AsyncSession = Depends(get_db)
+):
+    # Ищем запись о покупке топа у текущей компании
+    result = await db.execute(
+        select(BuyTop)
+        .where(BuyTop.id_company == current_company.id)
+    )
+    top_purchase = result.scalar_one_or_none()
+
+    if not top_purchase:
+        return None  # Вообще не покупали
+
+    # Вернём данные независимо от активности
+    return BuyingTopPublic.from_orm_with_company(top_purchase, current_company.name)

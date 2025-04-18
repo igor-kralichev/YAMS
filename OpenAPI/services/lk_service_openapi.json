@@ -479,6 +479,41 @@
           }
         ]
       }
+    },
+    "/company/me/top-purchase": {
+      "get": {
+        "tags": [
+          "company"
+        ],
+        "summary": "GET запрос на просмотр данных о покупке топ-позиции",
+        "description": "Возвращает данные о покупке топ-позиции текущей компании: если активна — подробности, иначе — дата окончания, сумма и количество покупок",
+        "operationId": "get_top_purchase_company_me_top_purchase_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BuyingTopPublic"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Get Top Purchase Company Me Top Purchase Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -599,6 +634,72 @@
           "file"
         ],
         "title": "Body_upload_photo_user_upload_photo_post"
+      },
+      "BuyingTopPublic": {
+        "properties": {
+          "id_company": {
+            "type": "integer",
+            "title": "Id Company",
+            "description": "ID компании"
+          },
+          "days": {
+            "type": "integer",
+            "title": "Days",
+            "description": "Количество суток для топ-позиции"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id",
+            "description": "ID записи"
+          },
+          "time_stop": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Time Stop",
+            "description": "Время окончания топ-позиции"
+          },
+          "total_spent": {
+            "type": "number",
+            "title": "Total Spent",
+            "description": "Общая сумма потраченных денег"
+          },
+          "purchase_count": {
+            "type": "integer",
+            "title": "Purchase Count",
+            "description": "Количество покупок"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At",
+            "description": "Время создания"
+          },
+          "company_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Company Name",
+            "description": "Название компании"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_company",
+          "days",
+          "id",
+          "time_stop",
+          "total_spent",
+          "purchase_count",
+          "created_at",
+          "company_name"
+        ],
+        "title": "BuyingTopPublic",
+        "description": "Схема для публичного ответа API"
       },
       "ChangePasswordRequest": {
         "properties": {

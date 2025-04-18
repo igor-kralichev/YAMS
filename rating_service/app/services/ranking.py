@@ -74,8 +74,8 @@ async def calculate_company_rankings(db: AsyncSession) -> List[Dict]:
     weights = {
         "rating": 0.4,
         "feedback": 0.2,
-        "orders": 0.15,
-        "repeat": 0.15,
+        "repeat": 0.2,
+        "orders": 0.1,
         "year_founded": 0.1
     }
 

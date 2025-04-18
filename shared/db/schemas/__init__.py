@@ -4,4 +4,3 @@ from .refresh_token import RefreshTokenBase, RefreshTokenCreate, RefreshToken
 from .deal import DealBase, DealCreate, Deal
 from .feedback import FeedbackBase, FeedbackCreate, Feedback
 from .messages import MessageBase, MessageCreate, Message
-from .buying_top import BuyingTopBase, BuyingTopCreate, BuyingTopUpdate, BuyingTopInDB, BuyingTopPublic

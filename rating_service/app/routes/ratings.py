@@ -1,9 +1,12 @@
+from decimal import Decimal
+from zoneinfo import ZoneInfo
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select, func, distinct, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List, Optional
-from fastapi_pagination import Page, add_pagination
-from fastapi_pagination.ext.sqlalchemy import paginate
+import sqlalchemy as sa
+from typing import Optional
+from fastapi_pagination import Page, add_pagination, Params
 from sqlalchemy.orm import joinedload
 from redis.asyncio import Redis
 from datetime import datetime, timedelta
@@ -24,6 +27,8 @@ from rating_service.app.schemas.ratings import (
 from rating_service.app.services.ranking import calculate_company_rankings
 
 router = APIRouter()
+
+MOSCOW_TZ = ZoneInfo("Europe/Moscow")
 
 # Зависимость для Redis
 async def get_redis() -> Redis:
@@ -61,13 +66,12 @@ async def get_deal_branches(db: AsyncSession = Depends(get_db)):
 async def get_companies(
     region_id: Optional[int] = Query(None, description="Фильтр по ID региона"),
     industry_id: Optional[int] = Query(None, description="Фильтр по ID отрасли"),
-    page: int = Query(1, ge=1, description="Номер страницы"),
-    size: int = Query(30, ge=1, le=100, description="Количество записей на странице"),
+    params: Params = Depends(),  # Используем параметры пагинации от fastapi_pagination
     current_company: Company_Model = Depends(get_current_company),
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis)
 ):
-    cache_key = f"companies:region_{region_id or 'all'}:industry_{industry_id or 'all'}:page_{page}:size_{size}"
+    cache_key = f"companies:region_{region_id or 'all'}:industry_{industry_id or 'all'}:page_{params.page}:size_{params.size}"
     cached = await redis.get(cache_key)
     if cached:
         return Page(**json.loads(cached))
@@ -102,9 +106,12 @@ async def get_companies(
             avg_rating_subquery.c.avg_rating,
             industries_subquery.c.industry_ids,
             industries_subquery.c.industry_names,
-            BuyTop.time_stop
+            BuyTop.time_stop,
+            Account_Model.region_id,
+            Region.name.label("region_name")
         )
         .join(Account_Model, Company_Model.account_id == Account_Model.id)
+        .join(Region, Account_Model.region_id == Region.id)
         .join(BuyTop, BuyTop.id_company == Company_Model.id)
         .outerjoin(avg_rating_subquery, avg_rating_subquery.c.seller_id == Company_Model.account_id)
         .outerjoin(industries_subquery, industries_subquery.c.seller_id == Company_Model.account_id)
@@ -121,9 +128,12 @@ async def get_companies(
             Company_Model,
             avg_rating_subquery.c.avg_rating,
             industries_subquery.c.industry_ids,
-            industries_subquery.c.industry_names
+            industries_subquery.c.industry_names,
+            Account_Model.region_id,
+            Region.name.label("region_name")
         )
         .join(Account_Model, Company_Model.account_id == Account_Model.id)
+        .join(Region, Account_Model.region_id == Region.id)
         .outerjoin(avg_rating_subquery, avg_rating_subquery.c.seller_id == Company_Model.account_id)
         .outerjoin(industries_subquery, industries_subquery.c.seller_id == Company_Model.account_id)
         .where(~Company_Model.id.in_([c[0].id for c in top_companies]))  # Исключаем топ-компании
@@ -133,7 +143,7 @@ async def get_companies(
     if region_id:
         query = query.filter(Account_Model.region_id == region_id)
     if industry_id:
-        query = query.filter(industries_subquery.c.industry_ids.contains([industry_id]))
+        query = query.filter(industries_subquery.c.industry_ids.op('@>')(sa.cast([industry_id], sa.ARRAY(sa.Integer))))
 
     # Сортировка: по региону текущего пользователя, затем по средней оценке
     query = query.order_by(
@@ -141,14 +151,15 @@ async def get_companies(
         func.coalesce(avg_rating_subquery.c.avg_rating, 0).desc()
     )
 
-    # Пагинация для остальных компаний
-    other_companies = await paginate(db, query, params={"page": 1, "size": size * page})
+    # Выполняем запрос для остальных компаний
+    other_companies_result = await db.execute(query)
+    other_companies = other_companies_result.all()
 
     # Формируем объединенный результат
     result = []
 
     # Добавляем топ-компании
-    for company, avg_rating, industry_ids, industry_names, _ in top_companies:
+    for company, avg_rating, industry_ids, industry_names, time_stop, region_id, region_name in top_companies:
         partners = []
         if company.partner_companies:
             partner_result = await db.execute(
@@ -169,14 +180,16 @@ async def get_companies(
             "logo_url": company.logo_url,
             "description": company.description,
             "director_full_name": company.director_full_name,
-            "average_rating": avg_rating,
+            "average_rating": float(avg_rating) if avg_rating is not None else None,  # Соответствует Optional[float]
+            "region_id": region_id,
+            "region_name": region_name,
             "industries": industries,
             "partners": partners,
             "is_top": True
         })
 
     # Добавляем остальные компании
-    for company, avg_rating, industry_ids, industry_names in other_companies.items:
+    for company, avg_rating, industry_ids, industry_names, region_id, region_name in other_companies:
         partners = []
         if company.partner_companies:
             partner_result = await db.execute(
@@ -197,22 +210,19 @@ async def get_companies(
             "logo_url": company.logo_url,
             "description": company.description,
             "director_full_name": company.director_full_name,
-            "average_rating": avg_rating,
+            "average_rating": float(avg_rating) if avg_rating is not None else None,  # Соответствует Optional[float]
+            "region_id": region_id,
+            "region_name": region_name,
             "industries": industries,
             "partners": partners,
             "is_top": False
         })
 
-    # Пагинация для объединенного результата
-    start = (page - 1) * size
-    end = start + size
-    paginated_result = result[start:end]
-
+    # Пагинация через fastapi_pagination
     page_response = Page.create(
-        items=paginated_result,
+        items=result,
         total=len(result),
-        page=page,
-        size=size
+        params=params
     )
 
     # Кэшируем результат
@@ -230,13 +240,22 @@ async def get_company_details(
     db: AsyncSession = Depends(get_db)
 ):
     result = await db.execute(
-        select(Company_Model)
+        select(
+            Company_Model,
+            Account_Model.region_id,
+            Region.name.label("region_name")
+        )
         .where(Company_Model.id == company_id)
+        .join(Account_Model, Company_Model.account_id == Account_Model.id)
+        .join(Region, Account_Model.region_id == Region.id)  # Добавляем JOIN
         .options(joinedload(Company_Model.account))
     )
-    company = result.scalars().first()
-    if not company:
+
+    row = result.first()
+    if not row:
         raise HTTPException(status_code=404, detail="Компания не найдена")
+
+    company, region_id, region_name = row[0], row[1], row[2]
 
     partners = []
     if company.partner_companies:
@@ -253,13 +272,15 @@ async def get_company_details(
         "logo_url": company.logo_url,
         "slogan": company.slogan,
         "description": company.description,
+        "region_id": region_id,
+        "region_name": region_name,
         "legal_address": company.legal_address,
         "actual_address": company.actual_address,
         "employees": company.employees,
         "year_founded": company.year_founded,
         "website": company.website,
         "inn": company.inn,
-        "social_media_links": company.social_media_links,
+        "social_media_links": company.social_media_links or [],
         "partners": partners
     }
 
@@ -270,12 +291,11 @@ async def get_company_details(
     description="Выводит компании по 30 на страницу, сначала компании с активной топ-позицией (по убыванию time_stop), затем по VIKOR"
 )
 async def get_vikor_companies(
-    page: int = Query(1, ge=1, description="Номер страницы"),
-    size: int = Query(30, ge=1, le=100, description="Количество записей на странице"),
+    params: Params = Depends(),  # Используем параметры пагинации
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis)
 ):
-    cache_key = f"vikor_companies:page_{page}:size_{size}"
+    cache_key = f"vikor_companies:page_{params.page}:size_{params.size}"
     cached = await redis.get(cache_key)
     if cached:
         return Page(**json.loads(cached))
@@ -309,8 +329,12 @@ async def get_vikor_companies(
                  .group_by(Deal_Model.seller_id)
                  .having(func.count(DealConsumers.c.deal_id) > 1)
                  .scalar_subquery()), 0
-            ).label("repeat_customer_orders")
+            ).label("repeat_customer_orders"),
+            Account_Model.region_id,
+            Region.name.label("region_name")
         )
+        .join(Account_Model, Company_Model.account_id == Account_Model.id)  # Добавляем JOIN
+        .join(Region, Account_Model.region_id == Region.id)
         .join(BuyTop, BuyTop.id_company == Company_Model.id)
         .where(BuyTop.time_stop >= func.now())
         .order_by(BuyTop.time_stop.desc())
@@ -330,15 +354,17 @@ async def get_vikor_companies(
     result = []
 
     # Добавляем топ-компании
-    for company, time_stop, avg_rating, feedback_count, order_count, repeat_customer_orders in top_companies:
+    for company, time_stop, avg_rating, feedback_count, order_count, repeat_customer_orders, region_id, region_name in top_companies:
         result.append({
             "id": company.id,
             "name": company.name,
             "logo_url": company.logo_url,
-            "average_rating": avg_rating,
-            "feedback_count": feedback_count,
-            "order_count": order_count,
-            "repeat_customer_orders": repeat_customer_orders,
+            "average_rating": float(avg_rating) if avg_rating is not None else None,  # Соответствует Optional[float]
+            "feedback_count": int(feedback_count),  # Убедимся, что это int
+            "order_count": int(order_count),
+            "repeat_customer_orders": int(repeat_customer_orders),
+            "region_id": region_id,
+            "region_name": region_name,
             "vikor_score": 0.0,  # Топ-компании не используют VIKOR
             "is_top": True
         })
@@ -349,24 +375,21 @@ async def get_vikor_companies(
             "id": item["company"].id,
             "name": item["company"].name,
             "logo_url": item["company"].logo_url,
-            "average_rating": item["avg_rating"],
-            "feedback_count": item["feedback_count"],
-            "order_count": item["order_count"],
-            "repeat_customer_orders": item["repeat_customer_orders"],
-            "vikor_score": item["score"],
+            "average_rating": float(item["avg_rating"]) if item["avg_rating"] is not None else None,
+            "feedback_count": int(item["feedback_count"]),
+            "order_count": int(item["order_count"]),
+            "repeat_customer_orders": int(item["repeat_customer_orders"]),
+            "region_id": item["region_id"],
+            "region_name": item["region_name"],
+            "vikor_score": float(item["score"]),
             "is_top": False
         })
 
-    # Пагинация
-    start = (page - 1) * size
-    end = start + size
-    paginated_result = result[start:end]
-
+    # Пагинация через fastapi_pagination
     page_response = Page.create(
-        items=paginated_result,
+        items=result,
         total=len(result),
-        page=page,
-        size=size
+        params=params
     )
 
     # Кэшируем результат
@@ -395,7 +418,7 @@ async def buy_top_position(
     if days < 1:
         raise HTTPException(status_code=400, detail="Количество суток должно быть больше 0")
 
-    cost_per_day = 500.00  # Стоимость за сутки
+    cost_per_day = Decimal("500.00")  # Стоимость за сутки
     total_cost = days * cost_per_day  # Общая стоимость покупки
 
     # Проверяем, есть ли запись о топ-позиции (активной или неактивной)
@@ -406,13 +429,19 @@ async def buy_top_position(
         )
     ).scalar_one_or_none()
 
+    # Получаем текущее время в Moscow TZ
+    current_time = datetime.now(MOSCOW_TZ)
+
     if existing_top:
-        # Если запись существует, проверяем, активна ли она
-        is_active = existing_top.time_stop >= func.now()
+        is_active = (
+            await db.execute(
+                select(existing_top.time_stop >= func.timezone('Europe/Moscow', func.now()))
+            )
+        ).scalar()
         new_time_stop = (
-            existing_top.time_stop + timedelta(days=days)
+            existing_top.time_stop.astimezone(MOSCOW_TZ) + timedelta(days=days)
             if is_active
-            else func.now() + timedelta(days=days)
+            else current_time + timedelta(days=days)
         )
         await db.execute(
             update(BuyTop)
@@ -427,10 +456,10 @@ async def buy_top_position(
         await db.refresh(existing_top)
         result = existing_top
     else:
-        # Создаем новую запись о покупке топа
+        new_time_stop = current_time + timedelta(days=days)
         new_top = BuyTop(
             id_company=current_company.id,
-            time_stop=func.now() + timedelta(days=days),
+            time_stop=new_time_stop,
             total_spent=total_cost,
             purchase_count=1
         )
@@ -449,8 +478,16 @@ async def buy_top_position(
     )
 
     # Очищаем кэш рейтингов, чтобы обновить списки с учетом новой топ-позиции
-    await redis.delete("vikor_companies:*")
-    await redis.delete("companies:*")
+
+    # Удаляем кэш для vikor_companies
+    keys = await redis.keys("vikor_companies:*")
+    if keys:
+        await redis.delete(*keys)
+
+    # Удаляем кэш для companies
+    keys = await redis.keys("companies:*")
+    if keys:
+        await redis.delete(*keys)
 
     return BuyingTopPublic.from_orm_with_company(result, current_company.name)
 

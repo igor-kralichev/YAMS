@@ -15,6 +15,7 @@ from shared.db.session import AsyncSessionLocal
 from shared.db.models import Account_Model, Deal_Model, Feedback_Model, DealDetail, DealTypes, DealBranch, Region
 from shared.core.config import settings
 from shared.services.email import send_email
+from shared.services.auth import verify_password
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
@@ -27,83 +28,90 @@ class AdminAuth(AuthenticationBackend):
     def __init__(self, secret_key: str):
         super().__init__(secret_key=secret_key)
 
+    async def login_page(self, request: Request) -> RedirectResponse:
+        # Получаем сообщение из сессии
+        error = request.session.pop("login_error", None)
+        return await super().login_page(request, error=error)
+
     async def login(self, request: Request) -> bool:
         form = await request.form()
         username = form.get("username")
         password = form.get("password")
         client_ip = request.client.host
 
+        error_message = None
+
         if not username or not password:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Логин или пароль неверный"
-            )
+            error_message = "Логин и пароль обязательны для заполнения"
+        else:
 
-        # Проверяем, существует ли пользователь с таким email и ролью admin
-        async with AsyncSessionLocal() as db:
-            result = await db.execute(
-                select(Account_Model)
-                .where(Account_Model.email == username)
-                .where(Account_Model.role == "admin")
-                .where(Account_Model.is_active.is_(True))
-            )
-            admin_user = result.scalar_one_or_none()
+        # Проверяем, существует ли пользователь с таким email и ролью admin или moderator
+            async with AsyncSessionLocal() as db:
+                result = await db.execute(
+                    select(Account_Model)
+                    .where(Account_Model.email == username)
+                    .where(Account_Model.role.in_(["admin", "moderator"]))
+                    .where(Account_Model.is_active.is_(True))
+                )
+                user = result.scalar_one_or_none()
 
-            if not admin_user:
-                logger.warning(f"Неудачная попытка входа с IP {client_ip}: пользователь {username} не найден или не администратор")
-                return False
+            if not user:
+                error_message = "Пользователь не найден"
+            elif not verify_password(password, user.hashed_password):
+                error_message = "Неверный пароль"
 
-                # Проверяем пароль
-            from shared.services.auth import verify_password
-            if not verify_password(password, admin_user.hashed_password):
-                logger.warning(f"Неудачная попытка входа с IP {client_ip}: неверный пароль для пользователя {username}")
-                return False
+        if error_message:
+            # Сохраняем сообщение в сессии
+            request.session.update({"Ошибка входа": error_message})
+            return False
 
-            # Генерируем JWT-токен
-            token_data = {"sub": str(admin_user.id)}
-            token = jwt.encode(token_data, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+        # Генерируем JWT-токен
+        token_data = {"sub": str(user.id)}
+        token = jwt.encode(token_data, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
-            # Сохраняем токен в сессии
-            request.session.update({"token": token})
-            logger.info(f"Администратор {username} успешно вошёл с IP {client_ip}")
-            return True
+        # Сохраняем токен и роль в сессии
+        request.session.update({"token": token, "role": user.role})
+        logger.info(f"Пользователь {username} ({user.role}) успешно вошёл с IP {client_ip}")
+        return True
 
     async def logout(self, request: Request) -> bool:
             client_ip = request.client.host  # Получаем IP-адрес клиента
             # Очищаем сессию при выходе
             request.session.clear()
-            logger.info(f"Администратор вышел из аккаунта с IP {client_ip}")
+            logger.info(f"Пользователь вышел из аккаунта с IP {client_ip}")
             return True
-
 
     async def authenticate(self, request: Request) -> bool:
         token = request.session.get("token")
         if not token:
-            logger.warning("Aутентификация не пройдена: нет токена для сессии")
+            logger.warning("Аутентификация не пройдена: нет токена для сессии")
             return False
 
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
             account_id = payload.get("sub")
             if not account_id:
-                logger.warning("Aутентификация не пройдена: передан невалидный токен")
+                logger.warning("Аутентификация не пройдена: передан невалидный токен")
                 return False
 
-            # Проверяем, что пользователь всё ещё существует и является админом
+            # Проверяем, что пользователь существует и имеет роль admin или moderator
             async with AsyncSessionLocal() as db:
                 result = await db.execute(
                     select(Account_Model)
                     .where(Account_Model.id == int(account_id))
-                    .where(Account_Model.role == "admin")
+                    .where(Account_Model.role.in_(["admin", "moderator"]))
                     .where(Account_Model.is_active.is_(True))
                 )
-                admin_user = result.scalar_one_or_none()
+                user = result.scalar_one_or_none()
 
-                if not admin_user:
-                    logger.warning(f"Аутентификация не пройдена: пользователь {account_id} не найден или не администратор")
+                if not user:
+                    logger.warning(
+                        f"Аутентификация не пройдена: пользователь {account_id} не найден или не администратор/модератор")
                     return False
 
-            return True
+                # Сохраняем роль в сессии
+                request.session["role"] = user.role
+                return True
         except JWTError as e:
             logger.error(f"Аутентификация не пройдена: JWT ошибка - {str(e)}")
             return False
@@ -117,6 +125,10 @@ class AccountAdmin(ModelView, model=Account_Model):
     page_size = 20
     name = "Пользователь"
     name_plural = "Пользователи"
+
+    def is_accessible(self, request: Request) -> bool:
+        role = request.session.get("role")
+        return role == "admin"
 
     async def _update_active_status(self, request: Request, pks: list, is_active: bool, action: str) -> dict:
         """
@@ -222,6 +234,10 @@ class DealAdmin(ModelView, model=Deal_Model):
     name = "Сделка"
     name_plural = "Сделки"
 
+    def is_accessible(self, request: Request) -> bool:
+        role = request.session.get("role")
+        return role in ["admin", "moderator"]
+
     # Асинхронный метод, который вызывается при удалении модели
     async def on_model_delete(self, model, request: Request) -> None:
         # model.seller — продавец, связанный со сделкой
@@ -238,6 +254,10 @@ class FeedbackAdmin(ModelView, model=Feedback_Model):
     page_size = 20
     name = "Отзыв"
     name_plural = "Отзывы"
+
+    def is_accessible(self, request: Request) -> bool:
+        role = request.session.get("role")
+        return role in ["admin", "moderator"]
 
     # Асинхронный метод для обработки удаления отзыва
     async def on_model_delete(self, model, request: Request) -> None:
@@ -256,6 +276,10 @@ class RegionAdmin(ModelView, model=Region):
     name = "Регион"
     name_plural = "Регионы"
 
+    def is_accessible(self, request: Request) -> bool:
+        role = request.session.get("role")
+        return role == "admin"
+
 # Класс для администрирования отраслей сделок
 class DealBranchAdmin(ModelView, model=DealBranch):
     column_list = ["id", "name"]
@@ -263,6 +287,10 @@ class DealBranchAdmin(ModelView, model=DealBranch):
     page_size = 20
     name = "Отрасль сделки"
     name_plural = "Отрасли сделок"
+
+    def is_accessible(self, request: Request) -> bool:
+        role = request.session.get("role")
+        return role == "admin"
 
 # Класс для администрирования типов сделок
 class DealTypesAdmin(ModelView, model=DealTypes):
@@ -272,6 +300,10 @@ class DealTypesAdmin(ModelView, model=DealTypes):
     name = "Тип сделки"
     name_plural = "Типы сделок"
 
+    def is_accessible(self, request: Request) -> bool:
+        role = request.session.get("role")
+        return role == "admin"
+
 # Класс для администрирования деталей сделок
 class DealDetailAdmin(ModelView, model=DealDetail):
     column_list = ["id", "detail"]
@@ -279,3 +311,7 @@ class DealDetailAdmin(ModelView, model=DealDetail):
     page_size = 20
     name = "Деталь сделки"
     name_plural = "Детали сделок"
+
+    def is_accessible(self, request: Request) -> bool:
+        role = request.session.get("role")
+        return role == "admin"

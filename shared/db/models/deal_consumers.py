@@ -4,7 +4,7 @@ from shared.db.base import Base
 DealConsumers = Table(
     "deal_consumers",
     Base.metadata,
-    Column("id", Integer, primary_key=True, autoincrement=True),  # Уже индексирован (PK)
+    Column("id", Integer, primary_key=True, autoincrement=True),
     Column(
         "deal_id",
         Integer,

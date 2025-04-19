@@ -48,9 +48,9 @@ class Deal_Model(Base):
     messages = relationship("Message_Model", back_populates="deal", cascade="all, delete-orphan")
     consumers = relationship(
         "Account_Model",
-        secondary="deal_consumers",
+        secondary=deal_consumers,
         back_populates="purchased_deals",
-        order_by="deal_consumers.c.created_at"
+        order_by=deal_consumers.c.created_at
     )
     seller = relationship("Account_Model", foreign_keys=[seller_id], lazy="joined")
     deal_type = relationship("DealTypes", back_populates="deals")

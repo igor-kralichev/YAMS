@@ -1,10 +1,11 @@
 # Функция для отправки чека о покупке топ-позиции
 from datetime import datetime
+from decimal import Decimal
 
 from shared.services.email import send_email
 
 
-async def send_top_purchase_email(email: str, days: int, total_cost: float, time_stop: datetime):
+async def send_top_purchase_email(email: str, days: int, total_cost: Decimal, time_stop: datetime):
  html = f"""
  <html>
  <body style="font-family: Arial, sans-serif; color: #333;">

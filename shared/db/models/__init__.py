@@ -1,4 +1,4 @@
-from . import deal_consumers
+from .deal_consumers import DealConsumers as deal_consumers
 from .users import User_Model
 from .companies import Company_Model
 from .deal_branch import DealBranch

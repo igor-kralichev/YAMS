@@ -126,7 +126,7 @@ async def seed_users():
                 select(Account_Model).where(Account_Model.email == "admin@example.ru")
             )
             if result.scalars().first():
-                print("Админский аккаунт уже существует. Пропускаем создание.")
+                print("Аккаунт администратора уже существует. Пропускаем создание.")
             else:
                 # Создание админского аккаунта
                 admin_password = "admin"
@@ -142,7 +142,32 @@ async def seed_users():
                     region_id=55  # Нижегородская область
                 )
                 session.add(admin_account)
-                print("Админский аккаунт успешно добавлен!")
+                print("Аккаунт администратора успешно добавлен!")
+
+            await session.commit()
+
+            # Проверка наличия модератора
+            result = await session.execute(
+                select(Account_Model).where(Account_Model.email == "moderator@example.ru")
+            )
+            if result.scalars().first():
+                print("Аккаунт модератора уже существует. Пропускаем создание.")
+            else:
+                # Создание аккаунта модератора
+                moderator_password = "moderator"  # Установите желаемый пароль
+                moderator_hashed_password = get_password_hash(moderator_password)
+                moderator_account = Account_Model(
+                    email="moderator@example.ru",
+                    hashed_password=moderator_hashed_password,
+                    is_active=True,
+                    is_verified=True,
+                    verification_token=None,
+                    role="moderator",  # Устанавливаем роль moderator
+                    phone_num=None,  # Оставляем телефон пустым
+                    region_id=55  # Нижегородская область
+                )
+                session.add(moderator_account)
+                print("Аккаунт модератора успешно добавлен!")
 
             await session.commit()
 

@@ -123,6 +123,12 @@ async def proxy_to_admin_service(request: Request, path: str):
 async def get_csrf_token(csrf: CsrfProtect = Depends(get_csrf_protect)):
     return {"csrf_token": csrf.generate_csrf_tokens()}
 
+async def conditional_csrf(request: Request, csrf: CsrfProtect = Depends(get_csrf_protect)):
+    if request.method in ["POST", "PUT", "DELETE"]:
+        try:
+            await csrf.validate_csrf(request)
+        except CsrfProtectError:
+            raise HTTPException(status_code=403, detail="Невалидный CSRF токен")
 
 # Проксирование запросов к Auth Service
 @app.api_route(
@@ -176,18 +182,14 @@ async def auth_proxy(request: Request, path: str):
         "- DELETE /api/user/me — удаление текущего пользователя\n"
         "- POST /api/user/change-password — смена пароля\n"
         "- POST /api/user/upload-photo — обновление фото\n"
+        "- GET /api/user/purchase-history — возвращает историю покупок текущего пользователя\n"
     )
 )
 async def users_proxy(
         request: Request,
         path: str,
-        csrf: CsrfProtect = Depends(get_csrf_protect)
+        _: None = Depends(conditional_csrf)
 ):
-    try:
-        await csrf.validate_csrf(request)
-    except CsrfProtectError:
-        raise HTTPException(status_code=403, detail="Невалидный CSRF токен")
-
     async with AsyncClient() as client:
         url = f"{SERVICE_URLS['lk']}/user/{path}"
         response = await client.request(
@@ -222,18 +224,17 @@ async def users_proxy(
         "- DELETE /api/company/me — удаление текущей компании\n"
         "- POST /api/company/change-password — смена пароля\n"
         "- POST /api/company/upload-logo — обновление фото\n"
+        "- GET /api/company/interacted-companies — получение компаний, с которыми взаимодействовала текущая компания\n"
+        "- POST /api/company/set-partner-companies — выбор до 3 лучших компаний\n"
+        "- GET /api/company/partner-companies — получение названий партнёрских компаний\n"
+        "- GET /api/company/purchase-history — возвращает историю покупок текущей компании\n"
     )
 )
 async def companies_proxy(
         request: Request,
         path: str,
-        csrf: CsrfProtect = Depends(get_csrf_protect)
+        _: None = Depends(conditional_csrf)
 ):
-    try:
-        await csrf.validate_csrf(request)
-    except CsrfProtectError:
-        raise HTTPException(status_code=403, detail="Невалидный CSRF токен")
-
     async with AsyncClient() as client:
         url = f"{SERVICE_URLS['lk']}/company/{path}"
         response = await client.request(
@@ -273,13 +274,8 @@ async def companies_proxy(
 async def rating_proxy(
     request: Request,
     path: str,
-    csrf: CsrfProtect = Depends(get_csrf_protect)
+    _: None = Depends(conditional_csrf)
 ):
-    try:
-        await csrf.validate_csrf(request)
-    except CsrfProtectError:
-        raise HTTPException(status_code=403, detail="Невалидный CSRF токен")
-
     async with AsyncClient() as client:
         url = f"{SERVICE_URLS['rating']}/rating/{path}"
         response = await client.request(
@@ -322,13 +318,8 @@ async def rating_proxy(
 async def deals_proxy(
         request: Request,
         path: str,
-        csrf: CsrfProtect = Depends(get_csrf_protect)
+        _: None = Depends(conditional_csrf)
 ):
-    try:
-        await csrf.validate_csrf(request)
-    except CsrfProtectError:
-        raise HTTPException(status_code=403, detail="Невалидный CSRF токен")
-
     async with AsyncClient() as client:
         url = f"{SERVICE_URLS['deal']}/deal/{path}"
         response = await client.request(
@@ -364,13 +355,8 @@ async def deals_proxy(
 async def chat_proxy(
         request: Request,
         path: str,
-        csrf: CsrfProtect = Depends(get_csrf_protect)
+        _: None = Depends(conditional_csrf)
 ):
-    try:
-        await csrf.validate_csrf(request)
-    except CsrfProtectError:
-        raise HTTPException(status_code=403, detail="Невалидный CSRF токен")
-
     async with AsyncClient() as client:
         url = f"{SERVICE_URLS['deal']}/chat/{path}"
         response = await client.request(
@@ -406,13 +392,8 @@ async def chat_proxy(
 async def feedback_proxy(
         request: Request,
         path: str,
-        csrf: CsrfProtect = Depends(get_csrf_protect)
+        _: None = Depends(conditional_csrf)
 ):
-    try:
-        await csrf.validate_csrf(request)
-    except CsrfProtectError:
-        raise HTTPException(status_code=403, detail="Невалидный CSRF токен")
-    
     async with AsyncClient() as client:
         url = f"{SERVICE_URLS['deal']}/feedback/{path}"
         response = await client.request(

@@ -11,6 +11,8 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import joinedload
 
 from auth_service.app.routes.auth import send_verification_email
+from lk_service.app.services.password_service import change_password
+from lk_service.app.services.purchase_history import get_purchase_history
 from shared.db.models import User_Model as UserModel, Account_Model
 from shared.db.schemas import User as UserSchema
 from shared.services.auth import get_current_user
@@ -174,26 +176,17 @@ async def delete_company(
     )
 )
 async def change_user_password(
-        request: ChangePasswordRequest,
-        current_user: UserModel = Depends(get_current_user),
-        db: AsyncSession = Depends(get_db)
+    request: ChangePasswordRequest,
+    current_user: UserModel = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
 ):
-    # Проверка текущего пароля
-    if not verify_password(request.old_password, current_user.account.hashed_password):
-        raise HTTPException(400, detail="Неверный текущий пароль")
-
-    # Хэширование нового пароля
-    new_hashed_password = get_password_hash(request.new_password)
-
-    # Обновление пароля
-    await db.execute(
-        update(Account_Model)
-        .where(Account_Model.id == current_user.account_id)
-        .values(hashed_password=new_hashed_password)
+    account_id = current_user.account_id
+    return await change_password(
+        account_id=account_id,
+        old_password=request.old_password,
+        new_password=request.new_password,
+        db=db
     )
-    await db.commit()
-
-    return {"message": "Пароль успешно изменён"}
 
 
 
@@ -244,3 +237,16 @@ async def upload_photo(
     await db.commit()
 
     return {"photo_url": f"/{file_path}"}
+
+@router.get(
+    "/purchase-history",
+    summary="GET запрос на историю покупок",
+    description="Возвращает историю покупок текущего пользователя"
+)
+async def get_user_purchase_history(
+    current_user: UserModel = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    account_id = current_user.account_id
+    history = await get_purchase_history(account_id, db)
+    return history

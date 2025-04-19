@@ -186,6 +186,31 @@
         ]
       }
     },
+    "/user/purchase-history": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "GET запрос на историю покупок",
+        "description": "Возвращает историю покупок текущего пользователя",
+        "operationId": "get_user_purchase_history_user_purchase_history_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
     "/company/me": {
       "get": {
         "tags": [
@@ -514,6 +539,31 @@
           }
         ]
       }
+    },
+    "/company/purchase-history": {
+      "get": {
+        "tags": [
+          "company"
+        ],
+        "summary": "GET запрос на историю покупок",
+        "description": "Возвращает историю покупок текущей компании",
+        "operationId": "get_company_purchase_history_company_purchase_history_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -637,20 +687,15 @@
       },
       "BuyingTopPublic": {
         "properties": {
-          "id_company": {
-            "type": "integer",
-            "title": "Id Company",
-            "description": "ID компании"
-          },
-          "days": {
-            "type": "integer",
-            "title": "Days",
-            "description": "Количество суток для топ-позиции"
-          },
           "id": {
             "type": "integer",
             "title": "Id",
             "description": "ID записи"
+          },
+          "id_company": {
+            "type": "integer",
+            "title": "Id Company",
+            "description": "ID компании"
           },
           "time_stop": {
             "type": "string",
@@ -668,12 +713,6 @@
             "title": "Purchase Count",
             "description": "Количество покупок"
           },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Created At",
-            "description": "Время создания"
-          },
           "company_name": {
             "anyOf": [
               {
@@ -689,17 +728,14 @@
         },
         "type": "object",
         "required": [
-          "id_company",
-          "days",
           "id",
+          "id_company",
           "time_stop",
           "total_spent",
           "purchase_count",
-          "created_at",
           "company_name"
         ],
-        "title": "BuyingTopPublic",
-        "description": "Схема для публичного ответа API"
+        "title": "BuyingTopPublic"
       },
       "ChangePasswordRequest": {
         "properties": {

@@ -114,12 +114,9 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1,
-              "description": "Page number",
               "default": 1,
               "title": "Page"
-            },
-            "description": "Page number"
+            }
           },
           {
             "name": "size",
@@ -127,13 +124,9 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "maximum": 100,
-              "minimum": 1,
-              "description": "Page size",
               "default": 50,
               "title": "Size"
-            },
-            "description": "Page size"
+            }
           }
         ],
         "responses": {
@@ -218,12 +211,9 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 1,
-              "description": "Page number",
               "default": 1,
               "title": "Page"
-            },
-            "description": "Page number"
+            }
           },
           {
             "name": "size",
@@ -231,13 +221,9 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "maximum": 100,
-              "minimum": 1,
-              "description": "Page size",
               "default": 50,
               "title": "Size"
-            },
-            "description": "Page size"
+            }
           }
         ],
         "responses": {
@@ -323,6 +309,7 @@
           },
           "days": {
             "type": "integer",
+            "minimum": 1.0,
             "title": "Days",
             "description": "Количество суток для топ-позиции"
           }
@@ -337,20 +324,15 @@
       },
       "BuyingTopPublic": {
         "properties": {
-          "id_company": {
-            "type": "integer",
-            "title": "Id Company",
-            "description": "ID компании"
-          },
-          "days": {
-            "type": "integer",
-            "title": "Days",
-            "description": "Количество суток для топ-позиции"
-          },
           "id": {
             "type": "integer",
             "title": "Id",
             "description": "ID записи"
+          },
+          "id_company": {
+            "type": "integer",
+            "title": "Id Company",
+            "description": "ID компании"
           },
           "time_stop": {
             "type": "string",
@@ -368,12 +350,6 @@
             "title": "Purchase Count",
             "description": "Количество покупок"
           },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Created At",
-            "description": "Время создания"
-          },
           "company_name": {
             "anyOf": [
               {
@@ -389,17 +365,14 @@
         },
         "type": "object",
         "required": [
-          "id_company",
-          "days",
           "id",
+          "id_company",
           "time_stop",
           "total_spent",
           "purchase_count",
-          "created_at",
           "company_name"
         ],
-        "title": "BuyingTopPublic",
-        "description": "Схема для публичного ответа API"
+        "title": "BuyingTopPublic"
       },
       "CompanyDetailSchema": {
         "properties": {
@@ -531,6 +504,28 @@
             ],
             "title": "Social Media Links"
           },
+          "region_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Id"
+          },
+          "region_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Name"
+          },
           "partners": {
             "items": {
               "$ref": "#/components/schemas/PartnerSchema"
@@ -553,6 +548,8 @@
           "website",
           "inn",
           "social_media_links",
+          "region_id",
+          "region_name",
           "partners"
         ],
         "title": "CompanyDetailSchema"
@@ -611,6 +608,14 @@
             ],
             "title": "Average Rating"
           },
+          "region_id": {
+            "type": "integer",
+            "title": "Region Id"
+          },
+          "region_name": {
+            "type": "string",
+            "title": "Region Name"
+          },
           "industries": {
             "items": {
               "$ref": "#/components/schemas/IndustrySchema"
@@ -639,6 +644,8 @@
           "description",
           "director_full_name",
           "average_rating",
+          "region_id",
+          "region_name",
           "industries",
           "partners",
           "is_top"
@@ -693,6 +700,14 @@
             "type": "number",
             "title": "Vikor Score"
           },
+          "region_id": {
+            "type": "integer",
+            "title": "Region Id"
+          },
+          "region_name": {
+            "type": "string",
+            "title": "Region Name"
+          },
           "is_top": {
             "type": "boolean",
             "title": "Is Top",
@@ -709,6 +724,8 @@
           "order_count",
           "repeat_customer_orders",
           "vikor_score",
+          "region_id",
+          "region_name",
           "is_top"
         ],
         "title": "CompanyVikorSchema"

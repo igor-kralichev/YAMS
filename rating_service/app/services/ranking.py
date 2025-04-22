@@ -90,10 +90,10 @@ async def calculate_company_rankings(db: AsyncSession) -> List[Dict]:
     # Веса критериев
     weights = {
         "rating": 0.4,
-        "feedback": 0.2,
+        "feedback": 0.3,
         "repeat": 0.2,
-        "orders": 0.1,
-        "year_founded": 0.1
+        "orders": 0.05,
+        "year_founded": 0.05
     }
 
     # Извлекаем данные для Z-Score
@@ -168,14 +168,14 @@ async def calculate_company_rankings(db: AsyncSession) -> List[Dict]:
         "feedback": max(z_feedbacks, default=1),  # Максимизируем количество отзывов
         "orders": max(z_orders, default=1),  # Максимизируем количество заказов
         "repeat": max(z_repeats, default=1),  # Максимизируем повторные заказы
-        "year_founded": max(z_years, default=1)  # Максимизируем год основания (новые компании лучше)
+        "year_founded": min(z_years, default=1)  # Минимизируем год основания (старые компании лучше)
     }
     worst_values = {
         "rating": min(z_ratings, default=0),
         "feedback": min(z_feedbacks, default=0),
         "orders": min(z_orders, default=0),
         "repeat": min(z_repeats, default=0),
-        "year_founded": min(z_years, default=0)
+        "year_founded": max(z_years, default=0)
     }
 
     logger.debug(f"Best values: {best_values}")

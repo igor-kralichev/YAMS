@@ -6,19 +6,17 @@ from typing import List, Optional
 
 import aiofiles
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, BackgroundTasks, status, Body
-from pydantic import Field
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, delete, func
+from sqlalchemy import select, update, delete
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from sqlalchemy.orm import joinedload
 
-from auth_service.app.routes.auth import send_verification_email
-from lk_service.app.services.password_service import change_password
+from lk_service.app.services.change_data import send_verification_email
+from lk_service.app.services.change_data import change_password
 from lk_service.app.services.purchase_history import get_purchase_history
-from rating_service.app.schemas.ratings import BuyingTopPublic
+from shared.db.schemas.ratings import BuyingTopPublic
 from shared.services.transliterate import transliterate
-from shared.core.security import get_password_hash, verify_password
 from shared.db.models import Company_Model as CompanyModel, Account_Model, Deal_Model, deal_consumers, BuyTop
 from shared.db.schemas import Company as CompanySchema
 from shared.services.auth import get_current_company

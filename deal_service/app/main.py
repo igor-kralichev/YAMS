@@ -2,7 +2,7 @@
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
 
-from .routes import deals, feedback, chat
+from deal_service.app.routes import deals, feedback, chat
 
 
 app = FastAPI(

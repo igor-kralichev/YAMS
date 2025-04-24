@@ -1,0 +1,203 @@
+services:
+  postgresYAMS:
+    image: postgres:14
+    container_name: postgresYAMS
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: yams_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"  # Избегаем конфликта с локальной БД
+    networks:
+      - yams_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    command: ["postgres", "-c", "timezone=Europe/Moscow"]
+
+  redis:
+    image: redis:7.0
+    container_name: redisYAMS
+    ports:
+      - "6379:6379"
+    networks:
+      - yams_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api_gateway:
+    build:
+      context: .
+      dockerfile: api_gateway/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:123@postgresYAMS:5432/yams_db
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALGORITHM=${ALGORITHM}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
+      - REFRESH_TOKEN_EXPIRE_DAYS=${REFRESH_TOKEN_EXPIRE_DAYS}
+      - APP_URL=${APP_URL}
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      postgresYAMS:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      admin_service:
+        condition: service_started
+      auth_service:
+        condition: service_started
+      deal_service:
+        condition: service_started
+      lk_service:
+        condition: service_started
+      rating_service:
+        condition: service_started
+    networks:
+      - yams_network
+    env_file:
+      - .env
+
+  admin_service:
+    build:
+      context: .
+      dockerfile: admin_service/Dockerfile
+    ports:
+      - "8005:8005"  # Указываем порт явно
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:123@postgresYAMS:5432/yams_db
+      - SECRET_KEY=${SECRET_KEY}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+    depends_on:
+      postgresYAMS:
+        condition: service_healthy
+    networks:
+      - yams_network
+    env_file:
+      - .env
+
+  auth_service:
+    build:
+      context: .
+      dockerfile: auth_service/Dockerfile
+    ports:
+      - "8001:8001"  # Указываем порт явно
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:123@postgresYAMS:5432/yams_db
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALGORITHM=${ALGORITHM}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
+      - REFRESH_TOKEN_EXPIRE_DAYS=${REFRESH_TOKEN_EXPIRE_DAYS}
+    depends_on:
+      postgresYAMS:
+        condition: service_healthy
+    networks:
+      - yams_network
+    env_file:
+      - .env
+
+  deal_service:
+    build:
+      context: .
+      dockerfile: deal_service/Dockerfile
+    ports:
+      - "8002:8002"  # Указываем порт явно
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:123@postgresYAMS:5432/yams_db
+      - SECRET_KEY=${SECRET_KEY}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - REDIS_URL=redis://redis:6379/0  # Добавляем REDIS_URL
+    depends_on:
+      postgresYAMS:
+        condition: service_healthy
+      redis:
+        condition: service_healthy  # Добавляем зависимость от Redis
+    networks:
+      - yams_network
+    env_file:
+      - .env
+    volumes:
+      - ./static/deals:/YAMS/static/deals  # Монтируем static
+
+  lk_service:
+    build:
+      context: .
+      dockerfile: lk_service/Dockerfile
+    ports:
+      - "8004:8004"  # Указываем порт явно
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:123@postgresYAMS:5432/yams_db
+      - SECRET_KEY=${SECRET_KEY}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+    depends_on:
+      postgresYAMS:
+        condition: service_healthy
+      auth_service:
+        condition: service_started
+      rating_service:
+        condition: service_started
+    networks:
+      - yams_network
+    env_file:
+      - .env
+    volumes:
+      - ./static/companies:/YAMS/static/companies
+      - ./static/users:/YAMS/static/users
+
+  rating_service:
+    build:
+      context: .
+      dockerfile: rating_service/Dockerfile
+    ports:
+      - "8003:8003"  # Указываем порт явно
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:123@postgresYAMS:5432/yams_db
+      - SECRET_KEY=${SECRET_KEY}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - REDIS_URL=redis://redis:6379/0  # Добавляем REDIS_URL
+    depends_on:
+      postgresYAMS:
+        condition: service_healthy
+      redis:
+        condition: service_healthy  # Добавляем зависимость от Redis
+    networks:
+      - yams_network
+    env_file:
+      - .env
+    volumes:
+      - ./static/companies:/YAMS/static/companies  # Монтируем static
+
+volumes:
+  postgres_data:
+
+networks:
+  yams_network:
+    driver: bridge

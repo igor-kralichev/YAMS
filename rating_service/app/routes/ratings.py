@@ -1,3 +1,4 @@
+import os
 from decimal import Decimal
 from zoneinfo import ZoneInfo
 
@@ -20,7 +21,7 @@ from shared.db.models import (
 )
 from shared.db.session import get_db
 from shared.services.auth import get_current_company
-from rating_service.app.schemas.ratings import (
+from shared.db.schemas.ratings import (
     CompanyShortSchema, CompanyDetailSchema, CompanyVikorSchema,
     BuyingTopCreate, BuyingTopPublic
 )
@@ -32,8 +33,8 @@ MOSCOW_TZ = ZoneInfo("Europe/Moscow")
 
 # Зависимость для Redis
 async def get_redis() -> Redis:
-    from redis.asyncio import Redis
-    return Redis(host="localhost", port=6379, db=0, decode_responses=True)
+    redis_url = os.getenv("REDIS_URL", "redis://redis:6379/0")
+    return Redis.from_url(redis_url, decode_responses=True)
 
 @router.get(
     "/regions",

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routes import auth  # Локальные роуты
+from auth_service.app.routes import auth  # Локальные роуты
 
 app = FastAPI(
     title="Auth Service",

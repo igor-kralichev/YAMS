@@ -1,10 +1,16 @@
-from fastapi import APIRouter, status, Depends, HTTPException, BackgroundTasks, Body
+from pathlib import Path
+
+from fastapi import APIRouter, status, Depends, HTTPException, BackgroundTasks, Body, Request
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 import secrets
+import logging
 from datetime import datetime
+
 
 from shared.services.auth import get_current_account
 from shared.db.models.refresh_tokens import RefreshToken
@@ -19,15 +25,15 @@ from shared.core.security import get_password_hash, verify_password, create_acce
 from auth_service.app.services.auth import get_account_by_email, send_verification_email, verify_token
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
-
+# Регистрация пользователя
 # Регистрация пользователя
 @router.post(
     "/register/user",
-    response_model=UserSchema,
     summary="POST запрос на регистрацию для пользователя",
     description=(
-            "Тут добавляется инфа в 2 таблицы: accounts общая для авторизации, остальное в users"
+            "Добавляет запись в таблицы accounts и users. Обязательные поля: email, пароль, ФИО"
     )
 )
 async def register_user(
@@ -35,51 +41,53 @@ async def register_user(
         background_tasks: BackgroundTasks,
         db: AsyncSession = Depends(get_db)
 ):
-    # Проверяем, существует ли аккаунт с таким email
+    # Проверка существования аккаунта
     existing_account = await get_account_by_email(db, user.account.email)
     if existing_account:
-        raise HTTPException(
-            status_code=400,
-            detail="Email уже зарегистрирован"
-        )
+        raise HTTPException(400, "Email уже зарегистрирован")
 
+    # Хэширование пароля и создание токена
     hashed_password = get_password_hash(user.account.password)
     verification_token = secrets.token_urlsafe(32)
 
-    # Создаём аккаунт для пользователя
+    # Создание аккаунта
     db_account = Account_Model(
         email=user.account.email,
         hashed_password=hashed_password,
-        phone_num=user.account.phone_num,
-        region_id=user.account.region_id,
         is_active=True,
         is_verified=False,
         verification_token=verification_token,
         role="user"
     )
 
+    # Создание пользователя
     db_user = User_Model(
-        fullname=user.fullname,
-        photo_url=user.photo_url,
+        fullname=user.fullname,  # Обязательное поле
         account=db_account
     )
 
     db.add(db_user)
     await db.commit()
-    await db.refresh(db_user, attribute_names=["account"])  # Явно обновляем связь
+    await db.refresh(db_user, ["account"])
 
-    background_tasks.add_task(send_verification_email, user.account.email, verification_token, "user")
+    # Отправка письма
+    background_tasks.add_task(
+        send_verification_email,
+        user.account.email,
+        verification_token,
+        "user"
+    )
 
-    return db_user
+    return {"message": "Пользователь успешно зарегистрирован. Проверьте email для подтверждения"}
 
 
 # Регистрация компании
 @router.post(
     "/register/company",
-    response_model=CompanySchema,
     summary="POST запрос на регистрацию для компании",
     description=(
-            "Аналогично users, только для компании"
+            "Обязательные поля: название, ФИО директора, ИНН, "
+            "юр.адрес, год основания, описание, email и пароль"
     )
 )
 async def register_company(
@@ -87,51 +95,41 @@ async def register_company(
         background_tasks: BackgroundTasks,
         db: AsyncSession = Depends(get_db)
 ):
-    # Проверяем, существует ли аккаунт с таким email
+    # Проверка существования аккаунта
     existing_account = await get_account_by_email(db, company.account.email)
     if existing_account:
-        raise HTTPException(
-            status_code=400,
-            detail="Email уже зарегистрирован"
-        )
+        raise HTTPException(400, "Email уже зарегистрирован")
 
-    # Хэшируем пароль
+    # Хэширование пароля
     hashed_password = get_password_hash(company.account.password)
-
-    # Генерируем токен верификации
     verification_token = secrets.token_urlsafe(32)
 
-    # Создаем аккаунт компании
+    # Создание аккаунта
     db_account = Account_Model(
         email=company.account.email,
         hashed_password=hashed_password,
-        phone_num=company.account.phone_num,
-        region_id=company.account.region_id,
         is_active=True,
         is_verified=False,
         verification_token=verification_token,
         role="company"
     )
 
-    # Создаем компанию и связываем с аккаунтом
+    # Создание компании с обязательными полями
     db_company = Company_Model(
         name=company.name,
-        description=company.description,
-        slogan=company.slogan,
-        address=company.address,
-        logo_url=company.logo_url,
-        employees=company.employees,
+        director_full_name=company.director_full_name,
+        inn=company.inn,
+        legal_address=company.legal_address,
         year_founded=company.year_founded,
-        website=company.website,
-        account=db_account  # Связываем аккаунт
+        description=company.description,
+        account=db_account
     )
 
-    # Сохраняем в базе
     db.add(db_company)
     await db.commit()
-    await db.refresh(db_company, ["account"])  # Обновляем связь с аккаунтом
+    await db.refresh(db_company, ["account"])
 
-    # Отправляем email для подтверждения
+    # Отправка письма
     background_tasks.add_task(
         send_verification_email,
         company.account.email,
@@ -139,7 +137,7 @@ async def register_company(
         "company"
     )
 
-    return db_company
+    return {"message": "Компания успешно зарегистрирована. Проверьте email для подтверждения"}
 
 
 # Авторизация
@@ -199,38 +197,59 @@ async def login(
     await db.commit()
 
     return {
+        "message": "Успешный вход",
         "access_token": access_token,
-        "refresh_token": refresh_token,
         "token_type": "bearer",
         "role": role  # Опционально: вернуть роль в ответе
     }
 
 
+# Путь относительно текущего файла (auth.py)
+current_dir = Path(__file__).resolve().parent
+templates_dir = current_dir.parent / "templates"
+templates = Jinja2Templates(directory=str(templates_dir))
+
 # Подтверждение email
 @router.get(
     "/verify-email",
-    summary="GET запрос на подтверждение почты",
-    description=(
-            "После регистрации на почту приходит письмо, если там нажмать кнопку, то сюда перекинет"
-            "и подтвердит верификацию аккаунта"
-    )
+    response_class=HTMLResponse,
+    summary="GET запрос на подтверждение почты"
 )
-async def verify_email(token: str, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(
-        select(Account_Model).filter(Account_Model.verification_token == token)
-    )
-    account = result.scalar_one_or_none()
+async def verify_email(
+    request: Request,
+    token: str,
+    db: AsyncSession = Depends(get_db)
+):
+    try:
+        result = await db.execute(
+            select(Account_Model).filter(Account_Model.verification_token == token)
+        )
+        account = result.scalar_one_or_none()
 
-    if not account:
-        raise HTTPException(status_code=400, detail="Недействительный токен")
+        if not account:
+            return templates.TemplateResponse(
+                "error_email_verification.html",
+                {"request": request, "error": "Недействительный токен подтверждения"},
+                status_code=400
+            )
 
-    account.is_verified = True
-    account.verification_token = None
-    db.add(account)
-    await db.commit()
+        account.is_verified = True
+        account.verification_token = None
+        db.add(account)
+        await db.commit()
 
-    return {"message": "Email успешно подтверждён"}
-    raise HTTPException(status_code=400, detail="Неверный тип")
+        return templates.TemplateResponse(
+            "success_email_verification.html",
+            {"request": request, "email": account.email}
+        )
+
+    except Exception as e:
+        logger.error(f"Error verifying email: {str(e)}", exc_info=True)
+        return templates.TemplateResponse(
+            "error_email_verification.html",
+            {"request": request, "error": "Произошла внутренняя ошибка сервера"},
+            status_code=500
+        )
 
 @router.post(
     "/verify-token",
@@ -300,6 +319,7 @@ async def refresh_token(
     await db.commit()
 
     return {
+        "message": "Токены успешно обновлены",
         "access_token": new_access_token,
         "refresh_token": new_refresh_token,
         "token_type": "bearer"

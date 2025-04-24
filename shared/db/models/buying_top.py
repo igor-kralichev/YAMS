@@ -8,7 +8,7 @@ class BuyTop(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     id_company = Column(Integer, ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
-    time_stop = Column(DateTime(timezone=True), nullable=True, server_default=func.timezone('Europe/Moscow'))
+    time_stop = Column(DateTime(timezone=True), nullable=True)
     total_spent = Column(Numeric(12, 2), nullable=False, default=0.00)  # Общая сумма потраченных денег
     purchase_count = Column(Integer, nullable=False, default=0)  # Количество покупок топа
 

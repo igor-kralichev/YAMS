@@ -10,8 +10,8 @@ from sqlalchemy import select, update, delete
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import joinedload
 
-from auth_service.app.routes.auth import send_verification_email
-from lk_service.app.services.password_service import change_password
+from lk_service.app.services.change_data import send_verification_email
+from lk_service.app.services.change_data import change_password
 from lk_service.app.services.purchase_history import get_purchase_history
 from shared.db.models import User_Model as UserModel, Account_Model
 from shared.db.schemas import User as UserSchema

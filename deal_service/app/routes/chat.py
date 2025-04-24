@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+import os
 from datetime import datetime
 
 from fastapi import WebSocket, WebSocketDisconnect,WebSocketException, APIRouter, Depends, HTTPException, status
@@ -22,7 +23,7 @@ from shared.services.auth import get_current_account
 # Хранилище активных подключений
 active_connections = defaultdict(dict)
 logger = logging.getLogger(__name__)
-redis_client = Redis(host="localhost", port=6379, db=0)
+
 router = APIRouter()
 
 
@@ -144,13 +145,18 @@ async def get_user_chats(
         )
 
 
+async def get_redis() -> Redis:
+    redis_url = os.getenv("REDIS_URL", "redis://redis:6379/0")
+    logger.info(f"Using REDIS_URL: {redis_url}")
+    return Redis.from_url(redis_url, decode_responses=True)
 
 @router.websocket("/ws/deals/{deal_id}/{consumer_id}")
 async def websocket_chat(
     websocket: WebSocket,
     deal_id: int,
     consumer_id: int,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    redis: Redis = Depends(get_redis)
 ):
     """
     WebSocket для двухстороннего чата по сделке между продавцом и любым пользователем.
@@ -248,10 +254,10 @@ async def websocket_chat(
 
         # Шаг 6: Регистрация подключения
         active_connections.setdefault((deal_id, consumer_id), {})[current_account.id] = websocket
-        await redis_client.sadd(redis_key, current_account.id)
+        await redis.sadd(redis_key, current_account.id)
 
         # Шаг 7: Подписка на Redis
-        pubsub = redis_client.pubsub()
+        pubsub = redis.pubsub()
         await pubsub.subscribe(f"deal:{deal_id}:consumer:{consumer_id}")
 
         async def redis_listener():
@@ -313,7 +319,7 @@ async def websocket_chat(
 
                 # Публикация в Redis
                 message_dict = new_message.to_dict()
-                await redis_client.publish(f"deal:{deal_id}:consumer:{consumer_id}", json.dumps(message_dict))
+                await redis.publish(f"deal:{deal_id}:consumer:{consumer_id}", json.dumps(message_dict))
 
             except WebSocketDisconnect:
                 logger.info("Клиент отключен")
@@ -348,5 +354,5 @@ async def websocket_chat(
                 pass
         if current_account:
             active_connections.get((deal_id, consumer_id), {}).pop(current_account.id, None)
-            await redis_client.srem(redis_key, current_account.id)
+            await redis.srem(redis_key, current_account.id)
         await db.close()

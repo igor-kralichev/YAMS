@@ -1,17 +1,18 @@
 import asyncio
 import json
+import os
 from typing import Optional
 import logging
 
 from fastapi_csrf_protect.exceptions import CsrfProtectError
 from redis.asyncio import Redis
-from fastapi import FastAPI, Depends, Request, status, HTTPException, WebSocket, Query
+from fastapi import FastAPI, Depends, Request, Response, status, HTTPException, WebSocket, Query
 from fastapi.security import OAuth2PasswordBearer
 from fastapi_csrf_protect import CsrfProtect
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
 from fastapi_limiter import FastAPILimiter
 from httpx import AsyncClient, Timeout
+from starlette.responses import JSONResponse, HTMLResponse
 from websockets import connect as websocket_connect
 from websockets.exceptions import ConnectionClosed
 
@@ -48,19 +49,15 @@ csrf_protect.load_config(lambda: [
 ])
 
 # Подключение к Redis
-redis_client = Redis(
-    host=settings.REDIS_HOST,  # Например, "redis" (если в Docker)
-    port=settings.REDIS_PORT,  # 6379
-    db=settings.REDIS_DB       # 0
-)
+redis_url = os.getenv("REDIS_URL", "redis://redis:6379/0")
+redis_client = Redis.from_url(redis_url, decode_responses=True)
 
 # URL микросервисов
 SERVICE_URLS = {
-    "auth": "http://localhost:8001",
-    "deal": "http://localhost:8002",
-    "rating": "http://localhost:8003",
-    "lk": "http://localhost:8004",
-    "admin": "http://localhost:8005"
+    "auth": "http://auth_service:8001",    # auth_service, порт 8001
+    "deal": "http://deal_service:8002",    # deal_service, порт 8002
+    "rating": "http://rating_service:8003",# rating_service, порт 8003
+    "lk": "http://lk_service:8004",        # lk_service, порт 8004
 }
 
 # Создание таблиц при запуске
@@ -77,43 +74,6 @@ async def startup_event():
 def get_csrf_protect():
     return csrf_protect
 
-
-@app.api_route(
-    "/api/admin/{path:path}",
-    methods=["GET", "POST", "PUT", "DELETE"],
-    summary="Проксирование запросов к Admin Service",
-    description="Переадресация запросов к Admin Service для управления пользователями, сделками и другими сущностями."
-)
-async def proxy_to_admin_service(request: Request, path: str):
-    # Полный перехват и модификация URL
-    full_path = str(request.url)
-    admin_path = full_path.split("/api/admin/")[-1]
-
-    # Заменяем пути к статическим файлам
-    if admin_path.startswith("statics/"):
-        target_url = f"{SERVICE_URLS['admin']}/{admin_path}"
-    else:
-        target_url = f"{SERVICE_URLS['admin']}/admin/{admin_path}"
-
-    async with AsyncClient() as client:
-        # Копируем все заголовки кроме Host
-        headers = {k: v for k, v in request.headers.items() if k.lower() != "host"}
-
-        response = await client.request(
-            method=request.method,
-            url=target_url,
-            headers=headers,
-            params=request.query_params,
-            content=await request.body()
-        )
-
-        # Возвращаем ответ как есть
-        return Response(
-            content=response.content,
-            status_code=response.status_code,
-            headers=dict(response.headers),
-            media_type=response.headers.get("content-type")
-        )
 
 # Маршрут для CSRF-токена (остаётся в Gateway)
 @app.get(
@@ -162,7 +122,19 @@ async def auth_proxy(request: Request, path: str):
         print(f"Response from auth service: {response.status_code}, {response.text}")
 
         try:
-            return response.json()
+            # Если ответ содержит JSON - возвращаем как есть
+            if "application/json" in response.headers.get("content-type", ""):
+                return JSONResponse(
+                    content=response.json(),
+                    status_code=response.status_code,
+                    headers=dict(response.headers)
+                )
+            # Для HTML-ответов (верификация email)
+            return HTMLResponse(
+                content=response.content,
+                status_code=response.status_code,
+                headers=dict(response.headers)
+            )
         except json.JSONDecodeError:
             raise HTTPException(
                 status_code=500,
@@ -173,7 +145,7 @@ async def auth_proxy(request: Request, path: str):
 @app.api_route(
     "/api/user/{path:path}",
     methods=["GET", "POST", "PUT", "DELETE"],
-    summary="Проксирование запросов к Auth Service",
+    summary="Проксирование запросов к LK Service",
     description=(
         "Переадресация на ЛК пользователя\n"
         "Поддерживаемые пути:\n"
@@ -199,22 +171,20 @@ async def users_proxy(
             params=dict(request.query_params),
             content=await request.body()
         )
-        # Логирование для отладки
-        print(f"Response from auth service: {response.status_code}, {response.text}")
 
         try:
             return response.json()
         except json.JSONDecodeError:
             raise HTTPException(
                 status_code=500,
-                detail=f"Auth service error: {response.text}"
+                detail=f"LK service error: {response.text}"
             )
 
 # ЛК компании
 @app.api_route(
     "/api/company/{path:path}",
     methods=["GET", "POST", "PUT", "DELETE"],
-    summary="Проксирование запросов к Auth Service",
+    summary="Проксирование запросов к LK Service",
     description=(
         "Переадресация на ЛК компании\n"
         "Поддерживаемые пути:\n"
@@ -244,15 +214,13 @@ async def companies_proxy(
             params=dict(request.query_params),
             content=await request.body()
         )
-        # Логирование для отладки
-        print(f"Response from auth service: {response.status_code}, {response.text}")
 
         try:
             return response.json()
         except json.JSONDecodeError:
             raise HTTPException(
                 status_code=500,
-                detail=f"Auth service error: {response.text}"
+                detail=f"LK service error: {response.text}"
             )
 
 # Проксирование запросов к Rating Service
@@ -459,7 +427,7 @@ async def websocket_proxy(
 
     try:
         # Формируем URL с учетом consumer_id
-        backend_ws_url = f"ws://localhost:8002/chat/ws/deals/{deal_id}/{consumer_id}"
+        backend_ws_url = f"ws://deal_service:8002/chat/ws/deals/{deal_id}/{consumer_id}"
 
         async with websocket_connect(
             backend_ws_url,

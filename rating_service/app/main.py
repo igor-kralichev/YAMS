@@ -1,8 +1,8 @@
-# deal_service/app/main.py
+# rating_service/app/main.py
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
 
-from .routes import ratings
+from rating_service.app.routes import ratings
 
 app = FastAPI(
     title="Rating Service",

@@ -6,152 +6,6 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api_gateway/api/admin/{path}": {
-      "delete": {
-        "summary": "Проксирование запросов к Admin Service",
-        "description": "Переадресация запросов к Admin Service для управления пользователями, сделками и другими сущностями.",
-        "operationId": "proxy_to_admin_service_api_admin__path__delete",
-        "parameters": [
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Path"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Проксирование запросов к Admin Service",
-        "description": "Переадресация запросов к Admin Service для управления пользователями, сделками и другими сущностями.",
-        "operationId": "proxy_to_admin_service_api_admin__path__delete",
-        "parameters": [
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Path"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Проксирование запросов к Admin Service",
-        "description": "Переадресация запросов к Admin Service для управления пользователями, сделками и другими сущностями.",
-        "operationId": "proxy_to_admin_service_api_admin__path__delete",
-        "parameters": [
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Path"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "summary": "Проксирование запросов к Admin Service",
-        "description": "Переадресация запросов к Admin Service для управления пользователями, сделками и другими сущностями.",
-        "operationId": "proxy_to_admin_service_api_admin__path__delete",
-        "parameters": [
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Path"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api_gateway/api/csrf-token": {
       "get": {
         "summary": "Получение CSRF-токена",
@@ -170,46 +24,10 @@
       }
     },
     "/api_gateway/api/auth/{path}": {
-      "delete": {
+      "get": {
         "summary": "Проксирование запросов к Auth Service",
         "description": "Переадресация на регистрацию, авторизацию\nПоддерживаемые пути:\n- POST /api/auth/login — авторизация пользователя\n- POST /api/auth/register/user — регистрация пользователя\n- POST /api/auth/register/company — регистрация пользователя\n- GET /api/auth/verify-email — верификация почты\n- POST /api/auth/verify-token — проверка токена\n- POST /api/auth/update-access-token — обновление access_token\n- POST /api/auth/logout — выход из аккаунта и удаление refresh_token",
-        "operationId": "auth_proxy_api_auth__path__delete",
-        "parameters": [
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Path"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Проксирование запросов к Auth Service",
-        "description": "Переадресация на регистрацию, авторизацию\nПоддерживаемые пути:\n- POST /api/auth/login — авторизация пользователя\n- POST /api/auth/register/user — регистрация пользователя\n- POST /api/auth/register/company — регистрация пользователя\n- GET /api/auth/verify-email — верификация почты\n- POST /api/auth/verify-token — проверка токена\n- POST /api/auth/update-access-token — обновление access_token\n- POST /api/auth/logout — выход из аккаунта и удаление refresh_token",
-        "operationId": "auth_proxy_api_auth__path__delete",
+        "operationId": "auth_proxy_api_auth__path__get",
         "parameters": [
           {
             "name": "path",
@@ -245,7 +63,7 @@
       "post": {
         "summary": "Проксирование запросов к Auth Service",
         "description": "Переадресация на регистрацию, авторизацию\nПоддерживаемые пути:\n- POST /api/auth/login — авторизация пользователя\n- POST /api/auth/register/user — регистрация пользователя\n- POST /api/auth/register/company — регистрация пользователя\n- GET /api/auth/verify-email — верификация почты\n- POST /api/auth/verify-token — проверка токена\n- POST /api/auth/update-access-token — обновление access_token\n- POST /api/auth/logout — выход из аккаунта и удаление refresh_token",
-        "operationId": "auth_proxy_api_auth__path__delete",
+        "operationId": "auth_proxy_api_auth__path__get",
         "parameters": [
           {
             "name": "path",
@@ -278,10 +96,46 @@
           }
         }
       },
-      "get": {
+      "put": {
         "summary": "Проксирование запросов к Auth Service",
         "description": "Переадресация на регистрацию, авторизацию\nПоддерживаемые пути:\n- POST /api/auth/login — авторизация пользователя\n- POST /api/auth/register/user — регистрация пользователя\n- POST /api/auth/register/company — регистрация пользователя\n- GET /api/auth/verify-email — верификация почты\n- POST /api/auth/verify-token — проверка токена\n- POST /api/auth/update-access-token — обновление access_token\n- POST /api/auth/logout — выход из аккаунта и удаление refresh_token",
-        "operationId": "auth_proxy_api_auth__path__delete",
+        "operationId": "auth_proxy_api_auth__path__get",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Проксирование запросов к Auth Service",
+        "description": "Переадресация на регистрацию, авторизацию\nПоддерживаемые пути:\n- POST /api/auth/login — авторизация пользователя\n- POST /api/auth/register/user — регистрация пользователя\n- POST /api/auth/register/company — регистрация пользователя\n- GET /api/auth/verify-email — верификация почты\n- POST /api/auth/verify-token — проверка токена\n- POST /api/auth/update-access-token — обновление access_token\n- POST /api/auth/logout — выход из аккаунта и удаление refresh_token",
+        "operationId": "auth_proxy_api_auth__path__get",
         "parameters": [
           {
             "name": "path",
@@ -316,46 +170,10 @@
       }
     },
     "/api_gateway/api/user/{path}": {
-      "delete": {
-        "summary": "Проксирование запросов к Auth Service",
+      "get": {
+        "summary": "Проксирование запросов к LK Service",
         "description": "Переадресация на ЛК пользователя\nПоддерживаемые пути:\n- GET /api/user/me — просмотр данных текущего пользователя\n- PUT /api/user/me — обновление данных текущего пользователя\n- DELETE /api/user/me — удаление текущего пользователя\n- POST /api/user/change-password — смена пароля\n- POST /api/user/upload-photo — обновление фото\n- GET /api/user/purchase-history — возвращает историю покупок текущего пользователя",
-        "operationId": "users_proxy_api_user__path__delete",
-        "parameters": [
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Path"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Проксирование запросов к Auth Service",
-        "description": "Переадресация на ЛК пользователя\nПоддерживаемые пути:\n- GET /api/user/me — просмотр данных текущего пользователя\n- PUT /api/user/me — обновление данных текущего пользователя\n- DELETE /api/user/me — удаление текущего пользователя\n- POST /api/user/change-password — смена пароля\n- POST /api/user/upload-photo — обновление фото\n- GET /api/user/purchase-history — возвращает историю покупок текущего пользователя",
-        "operationId": "users_proxy_api_user__path__delete",
+        "operationId": "users_proxy_api_user__path__get",
         "parameters": [
           {
             "name": "path",
@@ -389,9 +207,9 @@
         }
       },
       "post": {
-        "summary": "Проксирование запросов к Auth Service",
+        "summary": "Проксирование запросов к LK Service",
         "description": "Переадресация на ЛК пользователя\nПоддерживаемые пути:\n- GET /api/user/me — просмотр данных текущего пользователя\n- PUT /api/user/me — обновление данных текущего пользователя\n- DELETE /api/user/me — удаление текущего пользователя\n- POST /api/user/change-password — смена пароля\n- POST /api/user/upload-photo — обновление фото\n- GET /api/user/purchase-history — возвращает историю покупок текущего пользователя",
-        "operationId": "users_proxy_api_user__path__delete",
+        "operationId": "users_proxy_api_user__path__get",
         "parameters": [
           {
             "name": "path",
@@ -424,10 +242,46 @@
           }
         }
       },
-      "get": {
-        "summary": "Проксирование запросов к Auth Service",
+      "put": {
+        "summary": "Проксирование запросов к LK Service",
         "description": "Переадресация на ЛК пользователя\nПоддерживаемые пути:\n- GET /api/user/me — просмотр данных текущего пользователя\n- PUT /api/user/me — обновление данных текущего пользователя\n- DELETE /api/user/me — удаление текущего пользователя\n- POST /api/user/change-password — смена пароля\n- POST /api/user/upload-photo — обновление фото\n- GET /api/user/purchase-history — возвращает историю покупок текущего пользователя",
-        "operationId": "users_proxy_api_user__path__delete",
+        "operationId": "users_proxy_api_user__path__get",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Проксирование запросов к LK Service",
+        "description": "Переадресация на ЛК пользователя\nПоддерживаемые пути:\n- GET /api/user/me — просмотр данных текущего пользователя\n- PUT /api/user/me — обновление данных текущего пользователя\n- DELETE /api/user/me — удаление текущего пользователя\n- POST /api/user/change-password — смена пароля\n- POST /api/user/upload-photo — обновление фото\n- GET /api/user/purchase-history — возвращает историю покупок текущего пользователя",
+        "operationId": "users_proxy_api_user__path__get",
         "parameters": [
           {
             "name": "path",
@@ -462,46 +316,10 @@
       }
     },
     "/api_gateway/api/company/{path}": {
-      "delete": {
-        "summary": "Проксирование запросов к Auth Service",
+      "get": {
+        "summary": "Проксирование запросов к LK Service",
         "description": "Переадресация на ЛК компании\nПоддерживаемые пути:\n- GET /api/company/me — просмотр данных текущей компании\n- GET /api/company/me/top-purchase — вывод данных о топ-месте в рейтинге\n- PUT /api/company/me — обновление данных текущей компании\n- DELETE /api/company/me — удаление текущей компании\n- POST /api/company/change-password — смена пароля\n- POST /api/company/upload-logo — обновление фото\n- GET /api/company/interacted-companies — получение компаний, с которыми взаимодействовала текущая компания\n- POST /api/company/set-partner-companies — выбор до 3 лучших компаний\n- GET /api/company/partner-companies — получение названий партнёрских компаний\n- GET /api/company/purchase-history — возвращает историю покупок текущей компании",
-        "operationId": "companies_proxy_api_company__path__delete",
-        "parameters": [
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Path"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Проксирование запросов к Auth Service",
-        "description": "Переадресация на ЛК компании\nПоддерживаемые пути:\n- GET /api/company/me — просмотр данных текущей компании\n- GET /api/company/me/top-purchase — вывод данных о топ-месте в рейтинге\n- PUT /api/company/me — обновление данных текущей компании\n- DELETE /api/company/me — удаление текущей компании\n- POST /api/company/change-password — смена пароля\n- POST /api/company/upload-logo — обновление фото\n- GET /api/company/interacted-companies — получение компаний, с которыми взаимодействовала текущая компания\n- POST /api/company/set-partner-companies — выбор до 3 лучших компаний\n- GET /api/company/partner-companies — получение названий партнёрских компаний\n- GET /api/company/purchase-history — возвращает историю покупок текущей компании",
-        "operationId": "companies_proxy_api_company__path__delete",
+        "operationId": "companies_proxy_api_company__path__get",
         "parameters": [
           {
             "name": "path",
@@ -535,9 +353,9 @@
         }
       },
       "post": {
-        "summary": "Проксирование запросов к Auth Service",
+        "summary": "Проксирование запросов к LK Service",
         "description": "Переадресация на ЛК компании\nПоддерживаемые пути:\n- GET /api/company/me — просмотр данных текущей компании\n- GET /api/company/me/top-purchase — вывод данных о топ-месте в рейтинге\n- PUT /api/company/me — обновление данных текущей компании\n- DELETE /api/company/me — удаление текущей компании\n- POST /api/company/change-password — смена пароля\n- POST /api/company/upload-logo — обновление фото\n- GET /api/company/interacted-companies — получение компаний, с которыми взаимодействовала текущая компания\n- POST /api/company/set-partner-companies — выбор до 3 лучших компаний\n- GET /api/company/partner-companies — получение названий партнёрских компаний\n- GET /api/company/purchase-history — возвращает историю покупок текущей компании",
-        "operationId": "companies_proxy_api_company__path__delete",
+        "operationId": "companies_proxy_api_company__path__get",
         "parameters": [
           {
             "name": "path",
@@ -570,10 +388,46 @@
           }
         }
       },
-      "get": {
-        "summary": "Проксирование запросов к Auth Service",
+      "put": {
+        "summary": "Проксирование запросов к LK Service",
         "description": "Переадресация на ЛК компании\nПоддерживаемые пути:\n- GET /api/company/me — просмотр данных текущей компании\n- GET /api/company/me/top-purchase — вывод данных о топ-месте в рейтинге\n- PUT /api/company/me — обновление данных текущей компании\n- DELETE /api/company/me — удаление текущей компании\n- POST /api/company/change-password — смена пароля\n- POST /api/company/upload-logo — обновление фото\n- GET /api/company/interacted-companies — получение компаний, с которыми взаимодействовала текущая компания\n- POST /api/company/set-partner-companies — выбор до 3 лучших компаний\n- GET /api/company/partner-companies — получение названий партнёрских компаний\n- GET /api/company/purchase-history — возвращает историю покупок текущей компании",
-        "operationId": "companies_proxy_api_company__path__delete",
+        "operationId": "companies_proxy_api_company__path__get",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Проксирование запросов к LK Service",
+        "description": "Переадресация на ЛК компании\nПоддерживаемые пути:\n- GET /api/company/me — просмотр данных текущей компании\n- GET /api/company/me/top-purchase — вывод данных о топ-месте в рейтинге\n- PUT /api/company/me — обновление данных текущей компании\n- DELETE /api/company/me — удаление текущей компании\n- POST /api/company/change-password — смена пароля\n- POST /api/company/upload-logo — обновление фото\n- GET /api/company/interacted-companies — получение компаний, с которыми взаимодействовала текущая компания\n- POST /api/company/set-partner-companies — выбор до 3 лучших компаний\n- GET /api/company/partner-companies — получение названий партнёрских компаний\n- GET /api/company/purchase-history — возвращает историю покупок текущей компании",
+        "operationId": "companies_proxy_api_company__path__get",
         "parameters": [
           {
             "name": "path",
@@ -608,10 +462,10 @@
       }
     },
     "/api_gateway/api/rating/{path}": {
-      "post": {
+      "get": {
         "summary": "Проксирование запросов к Rating Service",
         "description": "Переадресация запросов к Rating Service для получения рейтингов компаний.\nПоддерживаемые пути:\n- GET /api/rating/regions — получение списка регионов\n- GET /api/rating/industries — получение списка отраслей\n- GET /api/rating/companies — получение списка компаний с фильтрацией (требуется аутентификация)\n- GET /api/rating/companies/{company_id} — получение подробной информации о компании\n- GET /api/rating/ranking-vikor-companies — получение рейтинга компаний по VIKOR\n- POST /api/rating/buy-top — покупка топ-места в рейтинге посуточно",
-        "operationId": "rating_proxy_api_rating__path__post",
+        "operationId": "rating_proxy_api_rating__path__get",
         "parameters": [
           {
             "name": "path",
@@ -644,10 +498,10 @@
           }
         }
       },
-      "get": {
+      "post": {
         "summary": "Проксирование запросов к Rating Service",
         "description": "Переадресация запросов к Rating Service для получения рейтингов компаний.\nПоддерживаемые пути:\n- GET /api/rating/regions — получение списка регионов\n- GET /api/rating/industries — получение списка отраслей\n- GET /api/rating/companies — получение списка компаний с фильтрацией (требуется аутентификация)\n- GET /api/rating/companies/{company_id} — получение подробной информации о компании\n- GET /api/rating/ranking-vikor-companies — получение рейтинга компаний по VIKOR\n- POST /api/rating/buy-top — покупка топ-места в рейтинге посуточно",
-        "operationId": "rating_proxy_api_rating__path__post",
+        "operationId": "rating_proxy_api_rating__path__get",
         "parameters": [
           {
             "name": "path",
@@ -682,46 +536,10 @@
       }
     },
     "/api_gateway/api/deal/{path}": {
-      "delete": {
+      "get": {
         "summary": "Проксирование запросов к Deal Service",
         "description": "Переадресация на создание и прочие шалости со сделками\nПоддерживаемые пути:\n- GET /api/deal/regions — получение списка регионов (для фильтров)\n- GET /api/deal/deal-details — получение списка статусов сделок (активно, продано и т.д.)\n- GET /api/deal/deal-branches — получение списка отраслей (ИТ, сельское хозяйство и т.д.)\n- GET /api/deal/deal-types — получение списка типов сделок (продажа товара или услуга)\n- GET /api/deal/list — получение списка сделок (по умолчанию 50 сделок на страницу)\n- GET /api/deal/view-deal/{deal_id} — получение информации о конкретной сделке, включая количество покупателей и отзывов\n- POST /api/deal/create-deal — создание новой сделки (включая загрузку до 5 фотографий)\n- PUT /api/deal/update-deal/{deal_id} — обновление данных сделки (включая замену фотографий, максимум 5)\n- POST /api/deal/buy-deal/{deal_id} — покупка сделки (доступно только для сделок со статусом 'Активно')",
-        "operationId": "deals_proxy_api_deal__path__delete",
-        "parameters": [
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Path"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Проксирование запросов к Deal Service",
-        "description": "Переадресация на создание и прочие шалости со сделками\nПоддерживаемые пути:\n- GET /api/deal/regions — получение списка регионов (для фильтров)\n- GET /api/deal/deal-details — получение списка статусов сделок (активно, продано и т.д.)\n- GET /api/deal/deal-branches — получение списка отраслей (ИТ, сельское хозяйство и т.д.)\n- GET /api/deal/deal-types — получение списка типов сделок (продажа товара или услуга)\n- GET /api/deal/list — получение списка сделок (по умолчанию 50 сделок на страницу)\n- GET /api/deal/view-deal/{deal_id} — получение информации о конкретной сделке, включая количество покупателей и отзывов\n- POST /api/deal/create-deal — создание новой сделки (включая загрузку до 5 фотографий)\n- PUT /api/deal/update-deal/{deal_id} — обновление данных сделки (включая замену фотографий, максимум 5)\n- POST /api/deal/buy-deal/{deal_id} — покупка сделки (доступно только для сделок со статусом 'Активно')",
-        "operationId": "deals_proxy_api_deal__path__delete",
+        "operationId": "deals_proxy_api_deal__path__get",
         "parameters": [
           {
             "name": "path",
@@ -757,7 +575,7 @@
       "post": {
         "summary": "Проксирование запросов к Deal Service",
         "description": "Переадресация на создание и прочие шалости со сделками\nПоддерживаемые пути:\n- GET /api/deal/regions — получение списка регионов (для фильтров)\n- GET /api/deal/deal-details — получение списка статусов сделок (активно, продано и т.д.)\n- GET /api/deal/deal-branches — получение списка отраслей (ИТ, сельское хозяйство и т.д.)\n- GET /api/deal/deal-types — получение списка типов сделок (продажа товара или услуга)\n- GET /api/deal/list — получение списка сделок (по умолчанию 50 сделок на страницу)\n- GET /api/deal/view-deal/{deal_id} — получение информации о конкретной сделке, включая количество покупателей и отзывов\n- POST /api/deal/create-deal — создание новой сделки (включая загрузку до 5 фотографий)\n- PUT /api/deal/update-deal/{deal_id} — обновление данных сделки (включая замену фотографий, максимум 5)\n- POST /api/deal/buy-deal/{deal_id} — покупка сделки (доступно только для сделок со статусом 'Активно')",
-        "operationId": "deals_proxy_api_deal__path__delete",
+        "operationId": "deals_proxy_api_deal__path__get",
         "parameters": [
           {
             "name": "path",
@@ -790,10 +608,46 @@
           }
         }
       },
-      "get": {
+      "put": {
         "summary": "Проксирование запросов к Deal Service",
         "description": "Переадресация на создание и прочие шалости со сделками\nПоддерживаемые пути:\n- GET /api/deal/regions — получение списка регионов (для фильтров)\n- GET /api/deal/deal-details — получение списка статусов сделок (активно, продано и т.д.)\n- GET /api/deal/deal-branches — получение списка отраслей (ИТ, сельское хозяйство и т.д.)\n- GET /api/deal/deal-types — получение списка типов сделок (продажа товара или услуга)\n- GET /api/deal/list — получение списка сделок (по умолчанию 50 сделок на страницу)\n- GET /api/deal/view-deal/{deal_id} — получение информации о конкретной сделке, включая количество покупателей и отзывов\n- POST /api/deal/create-deal — создание новой сделки (включая загрузку до 5 фотографий)\n- PUT /api/deal/update-deal/{deal_id} — обновление данных сделки (включая замену фотографий, максимум 5)\n- POST /api/deal/buy-deal/{deal_id} — покупка сделки (доступно только для сделок со статусом 'Активно')",
-        "operationId": "deals_proxy_api_deal__path__delete",
+        "operationId": "deals_proxy_api_deal__path__get",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на создание и прочие шалости со сделками\nПоддерживаемые пути:\n- GET /api/deal/regions — получение списка регионов (для фильтров)\n- GET /api/deal/deal-details — получение списка статусов сделок (активно, продано и т.д.)\n- GET /api/deal/deal-branches — получение списка отраслей (ИТ, сельское хозяйство и т.д.)\n- GET /api/deal/deal-types — получение списка типов сделок (продажа товара или услуга)\n- GET /api/deal/list — получение списка сделок (по умолчанию 50 сделок на страницу)\n- GET /api/deal/view-deal/{deal_id} — получение информации о конкретной сделке, включая количество покупателей и отзывов\n- POST /api/deal/create-deal — создание новой сделки (включая загрузку до 5 фотографий)\n- PUT /api/deal/update-deal/{deal_id} — обновление данных сделки (включая замену фотографий, максимум 5)\n- POST /api/deal/buy-deal/{deal_id} — покупка сделки (доступно только для сделок со статусом 'Активно')",
+        "operationId": "deals_proxy_api_deal__path__get",
         "parameters": [
           {
             "name": "path",
@@ -828,46 +682,10 @@
       }
     },
     "/api_gateway/api/chat/{path}": {
-      "delete": {
+      "get": {
         "summary": "Проксирование запросов к Deal Service",
         "description": "Переадресация на чат (пока там только показ чатов, вебсокеты дальше для общения, они отдельно идут)\nПоддерживаемые пути:\n- GET /api/chat/my-chats — получение списка чатов текущего пользователя (продавца или покупателя)",
-        "operationId": "chat_proxy_api_chat__path__delete",
-        "parameters": [
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Path"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Проксирование запросов к Deal Service",
-        "description": "Переадресация на чат (пока там только показ чатов, вебсокеты дальше для общения, они отдельно идут)\nПоддерживаемые пути:\n- GET /api/chat/my-chats — получение списка чатов текущего пользователя (продавца или покупателя)",
-        "operationId": "chat_proxy_api_chat__path__delete",
+        "operationId": "chat_proxy_api_chat__path__get",
         "parameters": [
           {
             "name": "path",
@@ -903,7 +721,7 @@
       "post": {
         "summary": "Проксирование запросов к Deal Service",
         "description": "Переадресация на чат (пока там только показ чатов, вебсокеты дальше для общения, они отдельно идут)\nПоддерживаемые пути:\n- GET /api/chat/my-chats — получение списка чатов текущего пользователя (продавца или покупателя)",
-        "operationId": "chat_proxy_api_chat__path__delete",
+        "operationId": "chat_proxy_api_chat__path__get",
         "parameters": [
           {
             "name": "path",
@@ -936,10 +754,46 @@
           }
         }
       },
-      "get": {
+      "put": {
         "summary": "Проксирование запросов к Deal Service",
         "description": "Переадресация на чат (пока там только показ чатов, вебсокеты дальше для общения, они отдельно идут)\nПоддерживаемые пути:\n- GET /api/chat/my-chats — получение списка чатов текущего пользователя (продавца или покупателя)",
-        "operationId": "chat_proxy_api_chat__path__delete",
+        "operationId": "chat_proxy_api_chat__path__get",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на чат (пока там только показ чатов, вебсокеты дальше для общения, они отдельно идут)\nПоддерживаемые пути:\n- GET /api/chat/my-chats — получение списка чатов текущего пользователя (продавца или покупателя)",
+        "operationId": "chat_proxy_api_chat__path__get",
         "parameters": [
           {
             "name": "path",
@@ -974,46 +828,10 @@
       }
     },
     "/api_gateway/api/feedback/{path}": {
-      "delete": {
+      "get": {
         "summary": "Проксирование запросов к Deal Service",
         "description": "Переадресация на создание отзывов (если удаление, то, возможно, в админке будет)\nПоддерживаемые пути:\n- GET /api/feedback/{deal_id} — получение списка всех отзывов для указанной сделки\n- POST /api/feedback/create-feedback/{deal_id} — создание нового отзыва для сделки (с меткой is_purchaser для покупателей)",
-        "operationId": "feedback_proxy_api_feedback__path__delete",
-        "parameters": [
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Path"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Проксирование запросов к Deal Service",
-        "description": "Переадресация на создание отзывов (если удаление, то, возможно, в админке будет)\nПоддерживаемые пути:\n- GET /api/feedback/{deal_id} — получение списка всех отзывов для указанной сделки\n- POST /api/feedback/create-feedback/{deal_id} — создание нового отзыва для сделки (с меткой is_purchaser для покупателей)",
-        "operationId": "feedback_proxy_api_feedback__path__delete",
+        "operationId": "feedback_proxy_api_feedback__path__get",
         "parameters": [
           {
             "name": "path",
@@ -1049,7 +867,7 @@
       "post": {
         "summary": "Проксирование запросов к Deal Service",
         "description": "Переадресация на создание отзывов (если удаление, то, возможно, в админке будет)\nПоддерживаемые пути:\n- GET /api/feedback/{deal_id} — получение списка всех отзывов для указанной сделки\n- POST /api/feedback/create-feedback/{deal_id} — создание нового отзыва для сделки (с меткой is_purchaser для покупателей)",
-        "operationId": "feedback_proxy_api_feedback__path__delete",
+        "operationId": "feedback_proxy_api_feedback__path__get",
         "parameters": [
           {
             "name": "path",
@@ -1082,10 +900,46 @@
           }
         }
       },
-      "get": {
+      "put": {
         "summary": "Проксирование запросов к Deal Service",
         "description": "Переадресация на создание отзывов (если удаление, то, возможно, в админке будет)\nПоддерживаемые пути:\n- GET /api/feedback/{deal_id} — получение списка всех отзывов для указанной сделки\n- POST /api/feedback/create-feedback/{deal_id} — создание нового отзыва для сделки (с меткой is_purchaser для покупателей)",
-        "operationId": "feedback_proxy_api_feedback__path__delete",
+        "operationId": "feedback_proxy_api_feedback__path__get",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на создание отзывов (если удаление, то, возможно, в админке будет)\nПоддерживаемые пути:\n- GET /api/feedback/{deal_id} — получение списка всех отзывов для указанной сделки\n- POST /api/feedback/create-feedback/{deal_id} — создание нового отзыва для сделки (с меткой is_purchaser для покупателей)",
+        "operationId": "feedback_proxy_api_feedback__path__get",
         "parameters": [
           {
             "name": "path",
@@ -1142,7 +996,7 @@
           "auth"
         ],
         "summary": "POST запрос на регистрацию для пользователя",
-        "description": "Тут добавляется инфа в 2 таблицы: accounts общая для авторизации, остальное в users",
+        "description": "Добавляет запись в таблицы accounts и users. Обязательные поля: email, пароль, ФИО",
         "operationId": "register_user_auth_register_user_post",
         "requestBody": {
           "content": {
@@ -1159,9 +1013,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/auth_service_User"
-                }
+                "schema": {}
               }
             }
           },
@@ -1184,7 +1036,7 @@
           "auth"
         ],
         "summary": "POST запрос на регистрацию для компании",
-        "description": "Аналогично users, только для компании",
+        "description": "Обязательные поля: название, ФИО директора, ИНН, юр.адрес, год основания, описание, email и пароль",
         "operationId": "register_company_auth_register_company_post",
         "requestBody": {
           "content": {
@@ -1201,9 +1053,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/auth_service_Company"
-                }
+                "schema": {}
               }
             }
           },
@@ -1266,7 +1116,6 @@
           "auth"
         ],
         "summary": "GET запрос на подтверждение почты",
-        "description": "После регистрации на почту приходит письмо, если там нажмать кнопку, то сюда перекинети подтвердит верификацию аккаунта",
         "operationId": "verify_email_auth_verify_email_get",
         "parameters": [
           {
@@ -1283,8 +1132,10 @@
           "200": {
             "description": "Successful Response",
             "content": {
-              "application/json": {
-                "schema": {}
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
               }
             }
           },
@@ -2930,95 +2781,6 @@
         ],
         "title": "ValidationError"
       },
-      "auth_service_Account": {
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email",
-            "title": "Email",
-            "description": "Email для авторизации"
-          },
-          "phone_num": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Phone Num",
-            "description": "Телефон (11 цифр, если указан)"
-          },
-          "region_id": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Region Id",
-            "description": "ID региона"
-          },
-          "id": {
-            "type": "integer",
-            "title": "Id"
-          },
-          "is_active": {
-            "type": "boolean",
-            "title": "Is Active"
-          },
-          "is_verified": {
-            "type": "boolean",
-            "title": "Is Verified"
-          },
-          "verification_token": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Verification Token",
-            "description": "Токен верификации"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Created At"
-          },
-          "role": {
-            "type": "string",
-            "title": "Role"
-          },
-          "purchased_deal_ids": {
-            "items": {
-              "type": "integer"
-            },
-            "type": "array",
-            "title": "Purchased Deal Ids",
-            "description": "Список ID купленных сделок"
-          }
-        },
-        "type": "object",
-        "required": [
-          "email",
-          "phone_num",
-          "region_id",
-          "id",
-          "is_active",
-          "is_verified",
-          "verification_token",
-          "created_at",
-          "role",
-          "purchased_deal_ids"
-        ],
-        "title": "Account"
-      },
       "auth_service_AccountCreate": {
         "properties": {
           "email": {
@@ -3133,258 +2895,6 @@
           "token"
         ],
         "title": "Body_verify_token_endpoint_auth_verify_token_post"
-      },
-      "auth_service_Company": {
-        "properties": {
-          "name": {
-            "type": "string",
-            "title": "Name",
-            "description": "Название компании"
-          },
-          "description": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Description",
-            "description": "Описание компании"
-          },
-          "slogan": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Slogan",
-            "description": "Слоган"
-          },
-          "legal_address": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Legal Address",
-            "description": "Юридический адрес"
-          },
-          "actual_address": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Actual Address",
-            "description": "Фактический адрес"
-          },
-          "logo_url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Logo Url",
-            "description": "Путь до логотипа"
-          },
-          "employees": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Employees",
-            "description": "Количество сотрудников"
-          },
-          "year_founded": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Year Founded",
-            "description": "Год основания"
-          },
-          "website": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Website",
-            "description": "Ссылка на сайт"
-          },
-          "inn": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Inn",
-            "description": "ИНН (10 цифр)"
-          },
-          "kpp": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Kpp",
-            "description": "КПП (9 цифр)"
-          },
-          "ogrn": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Ogrn",
-            "description": "ОГРН (13 цифр)"
-          },
-          "oktmo": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Oktmo",
-            "description": "ОКТМО (8 или 11 цифр)"
-          },
-          "okpo": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Okpo",
-            "description": "ОКПО (8 цифр)"
-          },
-          "director_full_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Director Full Name",
-            "description": "ФИО директора"
-          },
-          "social_media_links": {
-            "anyOf": [
-              {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Social Media Links",
-            "description": "Ссылки на соцсети"
-          },
-          "partner_companies": {
-            "anyOf": [
-              {
-                "items": {
-                  "type": "integer"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Partner Companies",
-            "description": "ID партнёрских компаний (до 3)"
-          },
-          "id": {
-            "type": "integer",
-            "title": "Id"
-          },
-          "account_id": {
-            "type": "integer",
-            "title": "Account Id"
-          },
-          "account": {
-            "$ref": "#/components/schemas/auth_service_Account"
-          },
-          "partner_companies_names": {
-            "items": {
-              "type": "object"
-            },
-            "type": "array",
-            "title": "Partner Companies Names",
-            "readOnly": true
-          }
-        },
-        "type": "object",
-        "required": [
-          "name",
-          "description",
-          "slogan",
-          "legal_address",
-          "actual_address",
-          "logo_url",
-          "employees",
-          "year_founded",
-          "website",
-          "inn",
-          "kpp",
-          "ogrn",
-          "oktmo",
-          "okpo",
-          "director_full_name",
-          "social_media_links",
-          "partner_companies",
-          "id",
-          "account_id",
-          "account",
-          "partner_companies_names"
-        ],
-        "title": "Company"
       },
       "auth_service_CompanyCreate": {
         "properties": {
@@ -3620,33 +3130,6 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
-      },
-      "auth_service_User": {
-        "properties": {
-          "id": {
-            "type": "integer",
-            "title": "Id"
-          },
-          "fullname": {
-            "type": "string",
-            "title": "Fullname"
-          },
-          "account_id": {
-            "type": "integer",
-            "title": "Account Id"
-          },
-          "account": {
-            "$ref": "#/components/schemas/auth_service_Account"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "fullname",
-          "account_id",
-          "account"
-        ],
-        "title": "User"
       },
       "auth_service_UserCreate": {
         "properties": {

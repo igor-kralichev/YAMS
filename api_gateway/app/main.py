@@ -57,7 +57,7 @@ SERVICE_URLS = {
     "auth": "http://auth_service:8001",    # auth_service, порт 8001
     "deal": "http://deal_service:8002",    # deal_service, порт 8002
     "rating": "http://rating_service:8003",# rating_service, порт 8003
-    "lk": "http://lk_service:8004",        # lk_service, порт 8004
+    "lk": "http://account_service:8004",        # account_service, порт 8004
 }
 
 # Создание таблиц при запуске
@@ -145,7 +145,7 @@ async def auth_proxy(request: Request, path: str):
 @app.api_route(
     "/api/user/{path:path}",
     methods=["GET", "POST", "PUT", "DELETE"],
-    summary="Проксирование запросов к LK Service",
+    summary="Проксирование запросов к Account Service",
     description=(
         "Переадресация на ЛК пользователя\n"
         "Поддерживаемые пути:\n"
@@ -177,14 +177,14 @@ async def users_proxy(
         except json.JSONDecodeError:
             raise HTTPException(
                 status_code=500,
-                detail=f"LK service error: {response.text}"
+                detail=f"Account service error: {response.text}"
             )
 
 # ЛК компании
 @app.api_route(
     "/api/company/{path:path}",
     methods=["GET", "POST", "PUT", "DELETE"],
-    summary="Проксирование запросов к LK Service",
+    summary="Проксирование запросов к Account Service",
     description=(
         "Переадресация на ЛК компании\n"
         "Поддерживаемые пути:\n"
@@ -220,7 +220,7 @@ async def companies_proxy(
         except json.JSONDecodeError:
             raise HTTPException(
                 status_code=500,
-                detail=f"LK service error: {response.text}"
+                detail=f"Account service error: {response.text}"
             )
 
 # Проксирование запросов к Rating Service

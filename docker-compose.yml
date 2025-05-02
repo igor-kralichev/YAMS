@@ -61,7 +61,7 @@ services:
         condition: service_started
       deal_service:
         condition: service_started
-      lk_service:
+      account_service:
         condition: service_started
       rating_service:
         condition: service_started
@@ -141,10 +141,10 @@ services:
     volumes:
       - ./static/deals:/YAMS/static/deals  # Монтируем static
 
-  lk_service:
+  account_service:
     build:
       context: .
-      dockerfile: lk_service/Dockerfile
+      dockerfile: account_service/Dockerfile
     ports:
       - "8004:8004"  # Указываем порт явно
     environment:

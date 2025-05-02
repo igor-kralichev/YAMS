@@ -9,7 +9,7 @@ services = {
     "auth_service": "http://localhost:8001/openapi.json",
     "deal_service": "http://localhost:8002/openapi.json",
     "rating_service": "http://localhost:8003/openapi.json",
-    "lk_service": "http://localhost:8004/openapi.json",
+    "account_service": "http://localhost:8004/openapi.json",
 }
 
 # Базовая структура объединённой спецификации

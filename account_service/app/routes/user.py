@@ -1,4 +1,4 @@
-# lk_service/app/routes/users.py
+# account_service/app/routes/users.py
 import os
 import secrets
 from pathlib import Path
@@ -10,9 +10,9 @@ from sqlalchemy import select, update, delete
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import joinedload
 
-from lk_service.app.services.change_data import send_verification_email
-from lk_service.app.services.change_data import change_password
-from lk_service.app.services.purchase_history import get_purchase_history
+from account_service.app.services.change_data import send_verification_email
+from account_service.app.services.change_data import change_password
+from account_service.app.services.purchase_history import get_purchase_history
 from shared.db.models import User_Model as UserModel, Account_Model
 from shared.db.schemas import User as UserSchema
 from shared.services.auth import get_current_user

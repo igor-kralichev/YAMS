@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
 
-from lk_service.app.routes import user, company
+from account_service.app.routes import user, company
 
 app = FastAPI(
-    title="Lk Service",
+    title="Account Service",
     description="Сервис управления аккаунтами"
 )
 

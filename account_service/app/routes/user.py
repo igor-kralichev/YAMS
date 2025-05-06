@@ -18,7 +18,6 @@ from shared.db.schemas import User as UserSchema
 from shared.services.auth import get_current_user
 from shared.db.schemas.user import UserUpdate, ChangePasswordRequest
 from shared.db.session import get_db
-from shared.core.security import get_password_hash, verify_password
 from shared.services.transliterate import transliterate
 
 router = APIRouter()
@@ -172,7 +171,7 @@ async def delete_company(
     "/change-password",
     summary="POST запрос на смену пароля",
     description=(
-            "Как в компании (можно и в auth роут кинуть, но, думаю, и тут сойдёт"
+            "Смена пароля"
     )
 )
 async def change_user_password(

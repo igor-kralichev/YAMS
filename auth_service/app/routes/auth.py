@@ -19,15 +19,14 @@ from shared.db.models.companies import Company_Model
 from shared.db.models.users import User_Model
 
 from shared.db.session import get_db
-from shared.db.schemas.company import CompanyCreate, Company as CompanySchema
-from shared.db.schemas.user import UserCreate, User as UserSchema
-from shared.core.security import get_password_hash, verify_password, create_access_token, create_refresh_token, get_refresh_token_expiry
+from shared.db.schemas.company import CompanyCreate
+from shared.db.schemas.user import UserCreate
+from shared.security.security import get_password_hash, verify_password, create_access_token, create_refresh_token, get_refresh_token_expiry
 from auth_service.app.services.auth import get_account_by_email, send_verification_email, verify_token
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-# Регистрация пользователя
 # Регистрация пользователя
 @router.post(
     "/register/user",
@@ -200,7 +199,7 @@ async def login(
         "message": "Успешный вход",
         "access_token": access_token,
         "token_type": "bearer",
-        "role": role  # Опционально: вернуть роль в ответе
+        "role": role
     }
 
 

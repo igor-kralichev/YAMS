@@ -1,4 +1,4 @@
-# run_all.py
+# run_all_services.py
 import subprocess
 import time
 

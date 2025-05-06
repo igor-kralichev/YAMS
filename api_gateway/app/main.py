@@ -57,7 +57,7 @@ SERVICE_URLS = {
     "auth": "http://auth_service:8001",    # auth_service, порт 8001
     "deal": "http://deal_service:8002",    # deal_service, порт 8002
     "rating": "http://rating_service:8003",# rating_service, порт 8003
-    "lk": "http://account_service:8004",        # account_service, порт 8004
+    "lk": "http://account_service:8004",   # account_service, порт 8004
 }
 
 # Создание таблиц при запуске
@@ -75,7 +75,7 @@ def get_csrf_protect():
     return csrf_protect
 
 
-# Маршрут для CSRF-токена (остаётся в Gateway)
+# Маршрут для CSRF-токена
 @app.get(
     "/api/csrf-token",
     summary="Получение CSRF-токена",
@@ -521,9 +521,9 @@ async def websocket_proxy(
 # Корневой эндпоинт
 @app.get(
     "/",
-    summary="Просто так",
+    summary="Корень системы",
     description=(
-            "Ну хз, просто начало приложения в конце файла"
+            "Входная точка в систему"
     )
 )
 async def root():

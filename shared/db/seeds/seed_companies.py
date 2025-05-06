@@ -13,7 +13,7 @@ from sqlalchemy.orm import sessionmaker
 from shared.core.config import settings
 from shared.db.models.accounts import Account_Model
 from shared.db.models.companies import Company_Model
-from shared.core.security import get_password_hash
+from shared.security.security import get_password_hash
 
 # Добавляем корень проекта в sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')))

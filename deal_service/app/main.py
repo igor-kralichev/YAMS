@@ -16,3 +16,4 @@ app.include_router(feedback.router, prefix="/feedback", tags=["feedback"])
 app.include_router(chat.router, prefix="/chat", tags=["chat"])
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+

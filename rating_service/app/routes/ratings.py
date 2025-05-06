@@ -21,7 +21,7 @@ from shared.db.models import (
 )
 from shared.db.session import get_db
 from shared.services.auth import get_current_company
-from shared.db.schemas.ratings import (
+from rating_service.app.schemas.ratings import (
     CompanyShortSchema, CompanyDetailSchema, CompanyVikorSchema,
     BuyingTopCreate, BuyingTopPublic
 )

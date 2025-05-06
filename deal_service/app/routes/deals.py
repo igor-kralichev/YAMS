@@ -21,7 +21,7 @@ from shared.db.models.deal_consumers import DealConsumers
 from shared.db.session import get_db
 from shared.services.auth import get_current_account
 from shared.db.models.deals import Deal_Model
-from shared.db.schemas.deal import Deal
+from deal_service.app.schemas.deal import Deal
 import aiofiles
 import aiofiles.os as aio_os
 import aiofiles.ospath as aio_ospath

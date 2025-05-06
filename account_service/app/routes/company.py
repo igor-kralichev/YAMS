@@ -15,7 +15,7 @@ from sqlalchemy.orm import joinedload
 from account_service.app.services.change_data import send_verification_email
 from account_service.app.services.change_data import change_password
 from account_service.app.services.purchase_history import get_purchase_history
-from shared.db.schemas.ratings import BuyingTopPublic
+from rating_service.app.schemas.ratings import BuyingTopPublic
 from shared.services.transliterate import transliterate
 from shared.db.models import Company_Model as CompanyModel, Account_Model, Deal_Model, deal_consumers, BuyTop
 from shared.db.schemas import Company as CompanySchema

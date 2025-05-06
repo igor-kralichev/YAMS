@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional
 
 class FeedbackBase(BaseModel):
-    deal_id: Optional[int] = Field(None, description="ID сделки")  # Изменено на опциональное
+    deal_id: Optional[int] = Field(None, description="ID сделки")
     stars: int = Field(..., description="Оценка (от 0 до 5)")
     details: str = Field(..., description="Описание отзыва")
 

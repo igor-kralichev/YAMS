@@ -7,7 +7,7 @@ from shared.moderation.profanity_filter import filter
 from shared.services.auth import get_current_account
 from shared.db.models import Feedback_Model, Deal_Model, Account_Model
 from shared.db.models.deal_consumers import DealConsumers as deal_consumers
-from shared.db.schemas.feedback import FeedbackCreate, Feedback as FeedbackSchema
+from deal_service.app.schemas.feedback import FeedbackCreate, Feedback as FeedbackSchema
 
 router = APIRouter()
 
@@ -64,6 +64,13 @@ async def create_feedback(
     )
     deal = deal_result.scalar_one_or_none()
 
+    # Проверка на матерные слова
+    if not filter.is_clean_exact(feedback_data.details):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Маты это плохо"
+        )
+
     if not deal:
         raise HTTPException(status_code=404, detail="Сделка не найдена")
 
@@ -86,12 +93,7 @@ async def create_feedback(
             detail="Вы уже оставили отзыв для этой сделки"
         )
 
-    # Проверка на матные слова
-    if not filter.is_clean_exact(feedback_data.details):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Маты это плохо"
-        )
+
 
     # Проверяем, покупал ли пользователь эту сделку
     purchase_check = await db.execute(

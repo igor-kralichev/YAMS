@@ -4,7 +4,7 @@ from sqlalchemy import select, update
 
 from shared.core.config import settings
 from shared.db.models import Account_Model
-from shared.core.security import verify_password, get_password_hash
+from shared.security.security import verify_password, get_password_hash
 from shared.services.email import send_email
 
 
@@ -37,7 +37,6 @@ async def change_password(
         .values(hashed_password=new_hashed_password)
     )
     await db.commit()
-
     return {"message": "Пароль успешно изменён"}
 
 # Отправка верификационного письма

@@ -26,4 +26,5 @@ def create_refresh_token() -> str:
     return secrets.token_urlsafe(32)  # Генерируем случайный токен
 
 def get_refresh_token_expiry() -> datetime:
-    return datetime.now(ZoneInfo("Europe/Moscow")) + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)  # Срок действия
+    return (datetime.now(ZoneInfo("Europe/Moscow")) +
+            timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS))  # Срок действия

@@ -2,12 +2,10 @@ import asyncio
 import json
 import logging
 import os
-from datetime import datetime
 
 from fastapi import WebSocket, WebSocketDisconnect,WebSocketException, APIRouter, Depends, HTTPException, status
 from collections import defaultdict
 
-from jose import JWTError, jwt
 from redis.asyncio import Redis
 from sqlalchemy import select, func, or_, desc
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,7 +14,7 @@ from sqlalchemy.orm import joinedload, aliased
 from deal_service.app.services.chat import get_token_from_header, verify_token
 from shared.db.models import Account_Model, Deal_Model, Message_Model
 from shared.db.models.deal_consumers import DealConsumers as deal_consumers
-from shared.db.schemas.chat import ChatSchema
+from deal_service.app.schemas.chat import ChatSchema
 from shared.db.session import get_db
 from shared.services.auth import get_current_account
 

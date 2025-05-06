@@ -1,0 +1,5225 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "YAMS API",
+    "description": "Объединённое API для проекта YAMS с микросервисами",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api_gateway/api/csrf-token": {
+      "get": {
+        "summary": "Получение CSRF-токена",
+        "description": "Генерирует и возвращает CSRF-токен для защиты от CSRF-атак.",
+        "operationId": "get_csrf_token_api_csrf_token_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api_gateway/api/auth/{path}": {
+      "post": {
+        "summary": "Проксирование запросов к Auth Service",
+        "description": "Переадресация на регистрацию, авторизацию\nПоддерживаемые пути:\n- POST /api/auth/login — авторизация пользователя\n- POST /api/auth/register/user — регистрация пользователя\n- POST /api/auth/register/company — регистрация пользователя\n- GET /api/auth/verify-email — верификация почты\n- POST /api/auth/verify-token — проверка токена\n- POST /api/auth/update-access-token — обновление access_token\n- POST /api/auth/logout — выход из аккаунта и удаление refresh_token",
+        "operationId": "auth_proxy_api_auth__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Проксирование запросов к Auth Service",
+        "description": "Переадресация на регистрацию, авторизацию\nПоддерживаемые пути:\n- POST /api/auth/login — авторизация пользователя\n- POST /api/auth/register/user — регистрация пользователя\n- POST /api/auth/register/company — регистрация пользователя\n- GET /api/auth/verify-email — верификация почты\n- POST /api/auth/verify-token — проверка токена\n- POST /api/auth/update-access-token — обновление access_token\n- POST /api/auth/logout — выход из аккаунта и удаление refresh_token",
+        "operationId": "auth_proxy_api_auth__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Проксирование запросов к Auth Service",
+        "description": "Переадресация на регистрацию, авторизацию\nПоддерживаемые пути:\n- POST /api/auth/login — авторизация пользователя\n- POST /api/auth/register/user — регистрация пользователя\n- POST /api/auth/register/company — регистрация пользователя\n- GET /api/auth/verify-email — верификация почты\n- POST /api/auth/verify-token — проверка токена\n- POST /api/auth/update-access-token — обновление access_token\n- POST /api/auth/logout — выход из аккаунта и удаление refresh_token",
+        "operationId": "auth_proxy_api_auth__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Проксирование запросов к Auth Service",
+        "description": "Переадресация на регистрацию, авторизацию\nПоддерживаемые пути:\n- POST /api/auth/login — авторизация пользователя\n- POST /api/auth/register/user — регистрация пользователя\n- POST /api/auth/register/company — регистрация пользователя\n- GET /api/auth/verify-email — верификация почты\n- POST /api/auth/verify-token — проверка токена\n- POST /api/auth/update-access-token — обновление access_token\n- POST /api/auth/logout — выход из аккаунта и удаление refresh_token",
+        "operationId": "auth_proxy_api_auth__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api_gateway/api/user/{path}": {
+      "post": {
+        "summary": "Проксирование запросов к Account Service",
+        "description": "Переадресация на ЛК пользователя\nПоддерживаемые пути:\n- GET /api/user/me — просмотр данных текущего пользователя\n- PUT /api/user/me — обновление данных текущего пользователя\n- DELETE /api/user/me — удаление текущего пользователя\n- POST /api/user/change-password — смена пароля\n- POST /api/user/upload-photo — обновление фото\n- GET /api/user/purchase-history — возвращает историю покупок текущего пользователя",
+        "operationId": "users_proxy_api_user__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Проксирование запросов к Account Service",
+        "description": "Переадресация на ЛК пользователя\nПоддерживаемые пути:\n- GET /api/user/me — просмотр данных текущего пользователя\n- PUT /api/user/me — обновление данных текущего пользователя\n- DELETE /api/user/me — удаление текущего пользователя\n- POST /api/user/change-password — смена пароля\n- POST /api/user/upload-photo — обновление фото\n- GET /api/user/purchase-history — возвращает историю покупок текущего пользователя",
+        "operationId": "users_proxy_api_user__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Проксирование запросов к Account Service",
+        "description": "Переадресация на ЛК пользователя\nПоддерживаемые пути:\n- GET /api/user/me — просмотр данных текущего пользователя\n- PUT /api/user/me — обновление данных текущего пользователя\n- DELETE /api/user/me — удаление текущего пользователя\n- POST /api/user/change-password — смена пароля\n- POST /api/user/upload-photo — обновление фото\n- GET /api/user/purchase-history — возвращает историю покупок текущего пользователя",
+        "operationId": "users_proxy_api_user__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Проксирование запросов к Account Service",
+        "description": "Переадресация на ЛК пользователя\nПоддерживаемые пути:\n- GET /api/user/me — просмотр данных текущего пользователя\n- PUT /api/user/me — обновление данных текущего пользователя\n- DELETE /api/user/me — удаление текущего пользователя\n- POST /api/user/change-password — смена пароля\n- POST /api/user/upload-photo — обновление фото\n- GET /api/user/purchase-history — возвращает историю покупок текущего пользователя",
+        "operationId": "users_proxy_api_user__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api_gateway/api/company/{path}": {
+      "post": {
+        "summary": "Проксирование запросов к Account Service",
+        "description": "Переадресация на ЛК компании\nПоддерживаемые пути:\n- GET /api/company/me — просмотр данных текущей компании\n- GET /api/company/me/top-purchase — вывод данных о топ-месте в рейтинге\n- PUT /api/company/me — обновление данных текущей компании\n- DELETE /api/company/me — удаление текущей компании\n- POST /api/company/change-password — смена пароля\n- POST /api/company/upload-logo — обновление фото\n- GET /api/company/interacted-companies — получение компаний, с которыми взаимодействовала текущая компания\n- POST /api/company/set-partner-companies — выбор до 3 лучших компаний\n- GET /api/company/partner-companies — получение названий партнёрских компаний\n- GET /api/company/purchase-history — возвращает историю покупок текущей компании",
+        "operationId": "companies_proxy_api_company__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Проксирование запросов к Account Service",
+        "description": "Переадресация на ЛК компании\nПоддерживаемые пути:\n- GET /api/company/me — просмотр данных текущей компании\n- GET /api/company/me/top-purchase — вывод данных о топ-месте в рейтинге\n- PUT /api/company/me — обновление данных текущей компании\n- DELETE /api/company/me — удаление текущей компании\n- POST /api/company/change-password — смена пароля\n- POST /api/company/upload-logo — обновление фото\n- GET /api/company/interacted-companies — получение компаний, с которыми взаимодействовала текущая компания\n- POST /api/company/set-partner-companies — выбор до 3 лучших компаний\n- GET /api/company/partner-companies — получение названий партнёрских компаний\n- GET /api/company/purchase-history — возвращает историю покупок текущей компании",
+        "operationId": "companies_proxy_api_company__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Проксирование запросов к Account Service",
+        "description": "Переадресация на ЛК компании\nПоддерживаемые пути:\n- GET /api/company/me — просмотр данных текущей компании\n- GET /api/company/me/top-purchase — вывод данных о топ-месте в рейтинге\n- PUT /api/company/me — обновление данных текущей компании\n- DELETE /api/company/me — удаление текущей компании\n- POST /api/company/change-password — смена пароля\n- POST /api/company/upload-logo — обновление фото\n- GET /api/company/interacted-companies — получение компаний, с которыми взаимодействовала текущая компания\n- POST /api/company/set-partner-companies — выбор до 3 лучших компаний\n- GET /api/company/partner-companies — получение названий партнёрских компаний\n- GET /api/company/purchase-history — возвращает историю покупок текущей компании",
+        "operationId": "companies_proxy_api_company__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Проксирование запросов к Account Service",
+        "description": "Переадресация на ЛК компании\nПоддерживаемые пути:\n- GET /api/company/me — просмотр данных текущей компании\n- GET /api/company/me/top-purchase — вывод данных о топ-месте в рейтинге\n- PUT /api/company/me — обновление данных текущей компании\n- DELETE /api/company/me — удаление текущей компании\n- POST /api/company/change-password — смена пароля\n- POST /api/company/upload-logo — обновление фото\n- GET /api/company/interacted-companies — получение компаний, с которыми взаимодействовала текущая компания\n- POST /api/company/set-partner-companies — выбор до 3 лучших компаний\n- GET /api/company/partner-companies — получение названий партнёрских компаний\n- GET /api/company/purchase-history — возвращает историю покупок текущей компании",
+        "operationId": "companies_proxy_api_company__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api_gateway/api/rating/{path}": {
+      "post": {
+        "summary": "Проксирование запросов к Rating Service",
+        "description": "Переадресация запросов к Rating Service для получения рейтингов компаний.\nПоддерживаемые пути:\n- GET /api/rating/regions — получение списка регионов\n- GET /api/rating/industries — получение списка отраслей\n- GET /api/rating/companies — получение списка компаний с фильтрацией (требуется аутентификация)\n- GET /api/rating/companies/{company_id} — получение подробной информации о компании\n- GET /api/rating/ranking-vikor-companies — получение рейтинга компаний по VIKOR\n- POST /api/rating/buy-top — покупка топ-места в рейтинге посуточно",
+        "operationId": "rating_proxy_api_rating__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Проксирование запросов к Rating Service",
+        "description": "Переадресация запросов к Rating Service для получения рейтингов компаний.\nПоддерживаемые пути:\n- GET /api/rating/regions — получение списка регионов\n- GET /api/rating/industries — получение списка отраслей\n- GET /api/rating/companies — получение списка компаний с фильтрацией (требуется аутентификация)\n- GET /api/rating/companies/{company_id} — получение подробной информации о компании\n- GET /api/rating/ranking-vikor-companies — получение рейтинга компаний по VIKOR\n- POST /api/rating/buy-top — покупка топ-места в рейтинге посуточно",
+        "operationId": "rating_proxy_api_rating__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api_gateway/api/deal/{path}": {
+      "post": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на создание и прочие шалости со сделками\nПоддерживаемые пути:\n- GET /api/deal/regions — получение списка регионов (для фильтров)\n- GET /api/deal/deal-details — получение списка статусов сделок (активно, продано и т.д.)\n- GET /api/deal/deal-branches — получение списка отраслей (ИТ, сельское хозяйство и т.д.)\n- GET /api/deal/deal-types — получение списка типов сделок (продажа товара или услуга)\n- GET /api/deal/list — получение списка сделок (по умолчанию 50 сделок на страницу)\n- GET /api/deal/view-deal/{deal_id} — получение информации о конкретной сделке, включая количество покупателей и отзывов\n- POST /api/deal/create-deal — создание новой сделки (включая загрузку до 5 фотографий)\n- PUT /api/deal/update-deal/{deal_id} — обновление данных сделки (включая замену фотографий, максимум 5)\n- POST /api/deal/buy-deal/{deal_id} — покупка сделки (доступно только для сделок со статусом 'Активно')",
+        "operationId": "deals_proxy_api_deal__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на создание и прочие шалости со сделками\nПоддерживаемые пути:\n- GET /api/deal/regions — получение списка регионов (для фильтров)\n- GET /api/deal/deal-details — получение списка статусов сделок (активно, продано и т.д.)\n- GET /api/deal/deal-branches — получение списка отраслей (ИТ, сельское хозяйство и т.д.)\n- GET /api/deal/deal-types — получение списка типов сделок (продажа товара или услуга)\n- GET /api/deal/list — получение списка сделок (по умолчанию 50 сделок на страницу)\n- GET /api/deal/view-deal/{deal_id} — получение информации о конкретной сделке, включая количество покупателей и отзывов\n- POST /api/deal/create-deal — создание новой сделки (включая загрузку до 5 фотографий)\n- PUT /api/deal/update-deal/{deal_id} — обновление данных сделки (включая замену фотографий, максимум 5)\n- POST /api/deal/buy-deal/{deal_id} — покупка сделки (доступно только для сделок со статусом 'Активно')",
+        "operationId": "deals_proxy_api_deal__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на создание и прочие шалости со сделками\nПоддерживаемые пути:\n- GET /api/deal/regions — получение списка регионов (для фильтров)\n- GET /api/deal/deal-details — получение списка статусов сделок (активно, продано и т.д.)\n- GET /api/deal/deal-branches — получение списка отраслей (ИТ, сельское хозяйство и т.д.)\n- GET /api/deal/deal-types — получение списка типов сделок (продажа товара или услуга)\n- GET /api/deal/list — получение списка сделок (по умолчанию 50 сделок на страницу)\n- GET /api/deal/view-deal/{deal_id} — получение информации о конкретной сделке, включая количество покупателей и отзывов\n- POST /api/deal/create-deal — создание новой сделки (включая загрузку до 5 фотографий)\n- PUT /api/deal/update-deal/{deal_id} — обновление данных сделки (включая замену фотографий, максимум 5)\n- POST /api/deal/buy-deal/{deal_id} — покупка сделки (доступно только для сделок со статусом 'Активно')",
+        "operationId": "deals_proxy_api_deal__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на создание и прочие шалости со сделками\nПоддерживаемые пути:\n- GET /api/deal/regions — получение списка регионов (для фильтров)\n- GET /api/deal/deal-details — получение списка статусов сделок (активно, продано и т.д.)\n- GET /api/deal/deal-branches — получение списка отраслей (ИТ, сельское хозяйство и т.д.)\n- GET /api/deal/deal-types — получение списка типов сделок (продажа товара или услуга)\n- GET /api/deal/list — получение списка сделок (по умолчанию 50 сделок на страницу)\n- GET /api/deal/view-deal/{deal_id} — получение информации о конкретной сделке, включая количество покупателей и отзывов\n- POST /api/deal/create-deal — создание новой сделки (включая загрузку до 5 фотографий)\n- PUT /api/deal/update-deal/{deal_id} — обновление данных сделки (включая замену фотографий, максимум 5)\n- POST /api/deal/buy-deal/{deal_id} — покупка сделки (доступно только для сделок со статусом 'Активно')",
+        "operationId": "deals_proxy_api_deal__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api_gateway/api/chat/{path}": {
+      "post": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на чат (пока там только показ чатов, вебсокеты дальше для общения, они отдельно идут)\nПоддерживаемые пути:\n- GET /api/chat/my-chats — получение списка чатов текущего пользователя (продавца или покупателя)",
+        "operationId": "chat_proxy_api_chat__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на чат (пока там только показ чатов, вебсокеты дальше для общения, они отдельно идут)\nПоддерживаемые пути:\n- GET /api/chat/my-chats — получение списка чатов текущего пользователя (продавца или покупателя)",
+        "operationId": "chat_proxy_api_chat__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на чат (пока там только показ чатов, вебсокеты дальше для общения, они отдельно идут)\nПоддерживаемые пути:\n- GET /api/chat/my-chats — получение списка чатов текущего пользователя (продавца или покупателя)",
+        "operationId": "chat_proxy_api_chat__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на чат (пока там только показ чатов, вебсокеты дальше для общения, они отдельно идут)\nПоддерживаемые пути:\n- GET /api/chat/my-chats — получение списка чатов текущего пользователя (продавца или покупателя)",
+        "operationId": "chat_proxy_api_chat__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api_gateway/api/feedback/{path}": {
+      "post": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на создание отзывов (если удаление, то, возможно, в админке будет)\nПоддерживаемые пути:\n- GET /api/feedback/{deal_id} — получение списка всех отзывов для указанной сделки\n- POST /api/feedback/create-feedback/{deal_id} — создание нового отзыва для сделки (с меткой is_purchaser для покупателей)",
+        "operationId": "feedback_proxy_api_feedback__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на создание отзывов (если удаление, то, возможно, в админке будет)\nПоддерживаемые пути:\n- GET /api/feedback/{deal_id} — получение списка всех отзывов для указанной сделки\n- POST /api/feedback/create-feedback/{deal_id} — создание нового отзыва для сделки (с меткой is_purchaser для покупателей)",
+        "operationId": "feedback_proxy_api_feedback__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на создание отзывов (если удаление, то, возможно, в админке будет)\nПоддерживаемые пути:\n- GET /api/feedback/{deal_id} — получение списка всех отзывов для указанной сделки\n- POST /api/feedback/create-feedback/{deal_id} — создание нового отзыва для сделки (с меткой is_purchaser для покупателей)",
+        "operationId": "feedback_proxy_api_feedback__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Проксирование запросов к Deal Service",
+        "description": "Переадресация на создание отзывов (если удаление, то, возможно, в админке будет)\nПоддерживаемые пути:\n- GET /api/feedback/{deal_id} — получение списка всех отзывов для указанной сделки\n- POST /api/feedback/create-feedback/{deal_id} — создание нового отзыва для сделки (с меткой is_purchaser для покупателей)",
+        "operationId": "feedback_proxy_api_feedback__path__post",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/api_gateway_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api_gateway": {
+      "get": {
+        "summary": "Просто так",
+        "description": "Ну хз, просто начало приложения в конце файла",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth_service/auth/register/user": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "POST запрос на регистрацию для пользователя",
+        "description": "Добавляет запись в таблицы accounts и users. Обязательные поля: email, пароль, ФИО",
+        "operationId": "register_user_auth_register_user_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth_service_UserCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/auth_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth_service/auth/register/company": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "POST запрос на регистрацию для компании",
+        "description": "Обязательные поля: название, ФИО директора, ИНН, юр.адрес, год основания, описание, email и пароль",
+        "operationId": "register_company_auth_register_company_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth_service_CompanyCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/auth_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth_service/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "POST запрос на авторизацию",
+        "description": "Ищет по email в accounts и выбирает, кем будет пользователь",
+        "operationId": "login_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/auth_service_Body_login_auth_login_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/auth_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth_service/auth/verify-email": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "GET запрос на подтверждение почты",
+        "operationId": "verify_email_auth_verify_email_get",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/auth_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth_service/auth/verify-token": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "POST запрос на проверку токена",
+        "description": "Проверка валидности токена",
+        "operationId": "verify_token_endpoint_auth_verify_token_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth_service_Body_verify_token_endpoint_auth_verify_token_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/auth_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth_service/auth/update-access-token": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "POST запрос на обновление access_token",
+        "description": "Берёт refresh_token пользователя из бд и присваивает ему новый access_token",
+        "operationId": "refresh_token_auth_update_access_token_post",
+        "parameters": [
+          {
+            "name": "refresh_token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Refresh Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/auth_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth_service/auth/logout": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "POST запрос выход из аккаунта",
+        "description": "Удаляет refresh_token из бд для этого пользователя",
+        "operationId": "logout_auth_logout_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/deal_service/deal/regions": {
+      "get": {
+        "tags": [
+          "deals"
+        ],
+        "summary": "GET регионы нашей страны на 2025 год",
+        "description": "Для фильтров выборка по регионам",
+        "operationId": "get_regions_deal_regions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Get Regions Deal Regions Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deal_service/deal/deal-details": {
+      "get": {
+        "tags": [
+          "deals"
+        ],
+        "summary": "GET на получение деталей сделки",
+        "description": "Активно/Продано и т.д., см в seed_deal_details",
+        "operationId": "get_deal_details_deal_deal_details_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Get Deal Details Deal Deal Details Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deal_service/deal/deal-branches": {
+      "get": {
+        "tags": [
+          "deals"
+        ],
+        "summary": "GET на получение отраслей (выбрал основные, можно добавить)",
+        "description": "ИТ/сельское хозяйство и т.д., см в seed_deal_branches",
+        "operationId": "get_deal_branches_deal_deal_branches_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Get Deal Branches Deal Deal Branches Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deal_service/deal/deal-types": {
+      "get": {
+        "tags": [
+          "deals"
+        ],
+        "summary": "GET на получение формата сделки",
+        "description": "Тут только 2 состояние: Продажа товара или услуга",
+        "operationId": "get_deal_types_deal_deal_types_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Get Deal Types Deal Deal Types Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deal_service/deal/list": {
+      "get": {
+        "tags": [
+          "deals"
+        ],
+        "summary": "GET на получение сделок",
+        "description": "Возвращает сделки по 50 на страницу. Есть фильтрация по региону, типу сделки, отрасли сделки и поиск. Сделки сортируются с приоритетом по региону текущего пользователя, если регион указан.",
+        "operationId": "list_deals_deal_list_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "region_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Region Id"
+            }
+          },
+          {
+            "name": "deal_branch_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Deal Branch Id"
+            }
+          },
+          {
+            "name": "deal_type_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Deal Type Id"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Search"
+            }
+          },
+          {
+            "name": "sort_by_region",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Sort By Region"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Page size",
+              "default": 50,
+              "title": "Size"
+            },
+            "description": "Page size"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deal_service_Page_Deal_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deal_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deal_service/deal/view-deal/{deal_id}": {
+      "get": {
+        "tags": [
+          "deals"
+        ],
+        "summary": "GET на получение информации о конкретной сделке",
+        "description": "Возвращает полную информацию о сделке по её ID, включая количество покупателей и отзывов.",
+        "operationId": "view_deal_deal_view_deal__deal_id__get",
+        "parameters": [
+          {
+            "name": "deal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Deal Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deal_service_Deal"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deal_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deal_service/deal/create-deal": {
+      "post": {
+        "tags": [
+          "deals"
+        ],
+        "summary": "POST на создание сделки",
+        "description": "Вся информация по сделке тут будет и фото тоже здесь добавляет. Максимум 5 фотографий.",
+        "operationId": "create_deal_deal_create_deal_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/deal_service_Body_create_deal_deal_create_deal_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deal_service_Deal"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deal_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/deal_service/deal/update-deal/{deal_id}": {
+      "put": {
+        "tags": [
+          "deals"
+        ],
+        "summary": "PUT на обновление данных по сделке",
+        "description": "Обновить можно все данные, которые были для добавления. Если статус меняется на 'Продано вне YAMS', 'Продано (YAMS)' или 'Услуга закрыта', поле date_close заполняется текущей датой и временем. Максимум 5 фотографий, формат: .jpg, .jpeg, .png, размер до 5 МБ.",
+        "operationId": "update_deal_deal_update_deal__deal_id__put",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "deal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Deal Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/deal_service_Body_update_deal_deal_update_deal__deal_id__put"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deal_service_Deal"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deal_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deal_service/deal/buy-deal/{deal_id}": {
+      "post": {
+        "tags": [
+          "deals"
+        ],
+        "summary": "POST на покупку",
+        "description": "Покупка сделки и отправка email покупателю. Покупка возможна только если статус сделки 'Активно'. Повторная покупка разрешена.",
+        "operationId": "buy_deal_deal_buy_deal__deal_id__post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "deal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Deal Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deal_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deal_service/deal/delete-deal/{deal_id}": {
+      "delete": {
+        "tags": [
+          "deals"
+        ],
+        "summary": "DELETE сделки",
+        "description": "Удалить сделку из базы",
+        "operationId": "delete_deal_deal_delete_deal__deal_id__delete",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "deal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Deal Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deal_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deal_service/feedback/{deal_id}": {
+      "get": {
+        "tags": [
+          "feedback"
+        ],
+        "summary": "GET отзывы по сделке",
+        "description": "Получение списка всех отзывов, связанных с указанной сделкой.",
+        "operationId": "get_feedbacks_for_deal_feedback__deal_id__get",
+        "parameters": [
+          {
+            "name": "deal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Deal Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/deal_service_Feedback"
+                  },
+                  "title": "Response Get Feedbacks For Deal Feedback  Deal Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deal_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deal_service/feedback/create-feedback/{deal_id}": {
+      "post": {
+        "tags": [
+          "feedback"
+        ],
+        "summary": "POST на создание отзыва",
+        "description": "Добавление отзыва на сделку. Пользователи, которые покупали сделку, помечаются меткой is_purchaser.",
+        "operationId": "create_feedback_feedback_create_feedback__deal_id__post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "deal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Deal Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/deal_service_FeedbackCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deal_service_Feedback"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deal_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deal_service/chat/my-chats": {
+      "get": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "GET на получение чатов для пользователя",
+        "description": "Возвращает список чатов для текущего пользователя (продавца или любого пользователя). Каждый чат соответствует паре сделка-пользователь.",
+        "operationId": "get_user_chats_chat_my_chats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/deal_service_ChatSchema"
+                  },
+                  "type": "array",
+                  "title": "Response Get User Chats Chat My Chats Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/rating_service/rating/regions": {
+      "get": {
+        "tags": [
+          "rating"
+        ],
+        "summary": "GET регионы нашей страны на 2025 год",
+        "description": "Для фильтров выборка по регионам",
+        "operationId": "get_regions_rating_regions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Get Regions Rating Regions Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rating_service/rating/industries": {
+      "get": {
+        "tags": [
+          "rating"
+        ],
+        "summary": "GET на получение отраслей (выбрал основные, можно добавить)",
+        "description": "ИТ/сельское хозяйство и т.д., см в seed_deal_branches",
+        "operationId": "get_deal_branches_rating_industries_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Get Deal Branches Rating Industries Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rating_service/rating/companies": {
+      "get": {
+        "tags": [
+          "rating"
+        ],
+        "summary": "Получение списка компаний с фильтрацией и учетом топ-позиций",
+        "description": "Выводит компании по 30 на страницу, сначала с активной топ-позицией (по убыванию time_stop), затем по региону пользователя и средней оценке, с фильтрацией по региону и индустрии",
+        "operationId": "get_companies_rating_companies_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "region_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Фильтр по ID региона",
+              "title": "Region Id"
+            },
+            "description": "Фильтр по ID региона"
+          },
+          {
+            "name": "industry_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Фильтр по ID отрасли",
+              "title": "Industry Id"
+            },
+            "description": "Фильтр по ID отрасли"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rating_service_Page_CompanyShortSchema_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rating_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rating_service/rating/companies/{company_id}": {
+      "get": {
+        "tags": [
+          "rating"
+        ],
+        "summary": "Получение подробной информации о компании",
+        "description": "Возвращает полные данные компании по её ID",
+        "operationId": "get_company_details_rating_companies__company_id__get",
+        "parameters": [
+          {
+            "name": "company_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Company Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rating_service_CompanyDetailSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rating_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rating_service/rating/ranking-vikor-companies": {
+      "get": {
+        "tags": [
+          "rating"
+        ],
+        "summary": "Рейтинг компаний по VIKOR с учетом топ-позиций",
+        "description": "Выводит компании по 30 на страницу, сначала компании с активной топ-позицией (по убыванию time_stop), затем по VIKOR",
+        "operationId": "get_vikor_companies_rating_ranking_vikor_companies_get",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rating_service_Page_CompanyVikorSchema_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rating_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rating_service/rating/buy-top": {
+      "post": {
+        "tags": [
+          "rating"
+        ],
+        "summary": "Покупка топ-позиции для компании",
+        "description": "Покупает топ-позицию на указанное количество суток (500 руб./сутки). Суммирует время, если топ активен, или обновляет время окончания, если топ неактивен.",
+        "operationId": "buy_top_position_rating_buy_top_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/rating_service_BuyingTopCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rating_service_BuyingTopPublic"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rating_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/account_service/user/me": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "GET на просмотр данных пользователя",
+        "description": "ЛК пользователя",
+        "operationId": "read_users_me_user_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/account_service_User"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "PUT запрос на изменение данных пользователя",
+        "description": "Также как с компанией, т.е. без фото",
+        "operationId": "update_user_user_me_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/account_service_UserUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/account_service_User"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/account_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "DELETE пользователя",
+        "description": "Аналогично компании",
+        "operationId": "delete_company_user_me_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/account_service/user/change-password": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "POST запрос на смену пароля",
+        "description": "Как в компании (можно и в auth роут кинуть, но, думаю, и тут сойдёт",
+        "operationId": "change_user_password_user_change_password_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/account_service_ChangePasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/account_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/account_service/user/upload-photo": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "POST запрос на добавление фото в аккаунт пользователя",
+        "description": "Аналогия с компанией",
+        "operationId": "upload_photo_user_upload_photo_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/account_service_Body_upload_photo_user_upload_photo_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/account_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/account_service/user/purchase-history": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "GET запрос на историю покупок",
+        "description": "Возвращает историю покупок текущего пользователя",
+        "operationId": "get_user_purchase_history_user_purchase_history_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/account_service/company/me": {
+      "get": {
+        "tags": [
+          "company"
+        ],
+        "summary": "GET запрос на просмотр данных о компании, которая авторизовалась",
+        "description": "Возвращает данные текущей компании, включая названия партнёрских компаний",
+        "operationId": "read_companies_me_company_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/account_service_Company"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "company"
+        ],
+        "summary": "PUT запрос на обновление данных",
+        "description": "Обновить данные по компании в ЛК (лого в другом месте обновляем)",
+        "operationId": "update_company_company_me_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/account_service_CompanyUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/account_service_Company"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/account_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "company"
+        ],
+        "summary": "DELETE запрос на самоликвидацию",
+        "description": "Роскомнадзор аккаунта",
+        "operationId": "delete_company_company_me_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/account_service/company/change-password": {
+      "post": {
+        "tags": [
+          "company"
+        ],
+        "summary": "POST запрос на смену пароля",
+        "description": "Возможна проверка на ввод текущего пароля, после чего можно новый вводить",
+        "operationId": "change_company_password_company_change_password_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/account_service_ChangePasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/account_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/account_service/company/upload-logo": {
+      "post": {
+        "tags": [
+          "company"
+        ],
+        "summary": "POST запрос на смену/добавление лого",
+        "description": "Тут работа уже чисто с фото",
+        "operationId": "upload_logo_company_upload_logo_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/account_service_Body_upload_logo_company_upload_logo_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/account_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/account_service/company/interacted-companies": {
+      "get": {
+        "tags": [
+          "company"
+        ],
+        "summary": "Получение компаний, с которыми взаимодействовала текущая компания",
+        "description": "Возвращает уникальные компании-покупатели сделок текущей компании",
+        "operationId": "get_interacted_companies_company_interacted_companies_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Get Interacted Companies Company Interacted Companies Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/account_service/company/set-partner-companies": {
+      "post": {
+        "tags": [
+          "company"
+        ],
+        "summary": "Выбор до 3 лучших компаний",
+        "description": "Сохраняет до 3 ID компаний в partner_companies текущей компании",
+        "operationId": "set_partner_companies_company_set_partner_companies_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array",
+                "title": "Partner Ids",
+                "description": "Список ID компаний (от 0 до 3)"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/account_service_Company"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/account_service_HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/account_service/company/partner-companies": {
+      "get": {
+        "tags": [
+          "company"
+        ],
+        "summary": "Получение названий партнёрских компаний",
+        "description": "Возвращает названия компаний из partner_companies текущей компании",
+        "operationId": "get_partner_companies_company_partner_companies_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Get Partner Companies Company Partner Companies Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/account_service/company/me/top-purchase": {
+      "get": {
+        "tags": [
+          "company"
+        ],
+        "summary": "GET запрос на просмотр данных о покупке топ-позиции",
+        "description": "Возвращает данные о покупке топ-позиции текущей компании: если активна — подробности, иначе — дата окончания, сумма и количество покупок",
+        "operationId": "get_top_purchase_company_me_top_purchase_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/account_service_BuyingTopPublic"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Get Top Purchase Company Me Top Purchase Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/account_service/company/purchase-history": {
+      "get": {
+        "tags": [
+          "company"
+        ],
+        "summary": "GET запрос на историю покупок",
+        "description": "Возвращает историю покупок текущей компании",
+        "operationId": "get_company_purchase_history_company_purchase_history_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "api_gateway_HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/api_gateway_ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "api_gateway_ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "auth_service_AccountCreate": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email",
+            "description": "Email для авторизации"
+          },
+          "phone_num": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone Num",
+            "description": "Телефон (11 цифр, если указан)"
+          },
+          "region_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Id",
+            "description": "ID региона"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password",
+            "description": "Пароль для аккаунта"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "AccountCreate"
+      },
+      "auth_service_Body_login_auth_login_post": {
+        "properties": {
+          "grant_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "password"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grant Type"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          },
+          "scope": {
+            "type": "string",
+            "title": "Scope",
+            "default": ""
+          },
+          "client_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Id"
+          },
+          "client_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Secret"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "Body_login_auth_login_post"
+      },
+      "auth_service_Body_verify_token_endpoint_auth_verify_token_post": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token"
+        ],
+        "title": "Body_verify_token_endpoint_auth_verify_token_post"
+      },
+      "auth_service_CompanyCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Название компании"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "description": "Описание компании"
+          },
+          "slogan": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slogan",
+            "description": "Слоган"
+          },
+          "legal_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Legal Address",
+            "description": "Юридический адрес"
+          },
+          "actual_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual Address",
+            "description": "Фактический адрес"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url",
+            "description": "Путь до логотипа"
+          },
+          "employees": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Employees",
+            "description": "Количество сотрудников"
+          },
+          "year_founded": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year Founded",
+            "description": "Год основания"
+          },
+          "website": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Website",
+            "description": "Ссылка на сайт"
+          },
+          "inn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inn",
+            "description": "ИНН (10 цифр)"
+          },
+          "kpp": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kpp",
+            "description": "КПП (9 цифр)"
+          },
+          "ogrn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ogrn",
+            "description": "ОГРН (13 цифр)"
+          },
+          "oktmo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oktmo",
+            "description": "ОКТМО (8 или 11 цифр)"
+          },
+          "okpo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Okpo",
+            "description": "ОКПО (8 цифр)"
+          },
+          "director_full_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Director Full Name",
+            "description": "ФИО директора"
+          },
+          "social_media_links": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Social Media Links",
+            "description": "Ссылки на соцсети"
+          },
+          "partner_companies": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Partner Companies",
+            "description": "ID партнёрских компаний (до 3)"
+          },
+          "account": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/auth_service_AccountCreate"
+              }
+            ],
+            "description": "Данные аккаунта компании"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "account"
+        ],
+        "title": "CompanyCreate"
+      },
+      "auth_service_HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/auth_service_ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "auth_service_UserCreate": {
+        "properties": {
+          "fullname": {
+            "type": "string",
+            "title": "Fullname",
+            "description": "ФИО пользователя"
+          },
+          "photo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Photo Url",
+            "description": "Путь до фото"
+          },
+          "account": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/auth_service_AccountCreate"
+              }
+            ],
+            "description": "Данные для создания аккаунта пользователя"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fullname",
+          "account"
+        ],
+        "title": "UserCreate"
+      },
+      "auth_service_ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "deal_service_Body_create_deal_deal_create_deal_post": {
+        "properties": {
+          "name_deal": {
+            "type": "string",
+            "title": "Name Deal"
+          },
+          "seller_price": {
+            "type": "number",
+            "title": "Seller Price"
+          },
+          "region_id": {
+            "type": "integer",
+            "title": "Region Id"
+          },
+          "address_deal": {
+            "type": "string",
+            "title": "Address Deal"
+          },
+          "deal_type_id": {
+            "type": "integer",
+            "title": "Deal Type Id"
+          },
+          "deal_branch_id": {
+            "type": "integer",
+            "title": "Deal Branch Id"
+          },
+          "photos": {
+            "items": {
+              "type": "string",
+              "format": "binary"
+            },
+            "type": "array",
+            "title": "Photos"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name_deal",
+          "seller_price",
+          "region_id",
+          "address_deal",
+          "deal_type_id",
+          "deal_branch_id"
+        ],
+        "title": "Body_create_deal_deal_create_deal_post"
+      },
+      "deal_service_Body_update_deal_deal_update_deal__deal_id__put": {
+        "properties": {
+          "name_deal": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name Deal"
+          },
+          "seller_price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seller Price"
+          },
+          "region_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Id"
+          },
+          "address_deal": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address Deal"
+          },
+          "deal_details_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deal Details Id"
+          },
+          "photos": {
+            "items": {
+              "type": "string",
+              "format": "binary"
+            },
+            "type": "array",
+            "title": "Photos"
+          }
+        },
+        "type": "object",
+        "title": "Body_update_deal_deal_update_deal__deal_id__put"
+      },
+      "deal_service_ChatSchema": {
+        "properties": {
+          "deal_id": {
+            "type": "integer",
+            "title": "Deal Id"
+          },
+          "consumer_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Consumer Id"
+          },
+          "name_deal": {
+            "type": "string",
+            "title": "Name Deal"
+          },
+          "last_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Message"
+          },
+          "last_message_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Message At"
+          },
+          "participants": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Participants"
+          },
+          "is_purchaser": {
+            "type": "boolean",
+            "title": "Is Purchaser"
+          }
+        },
+        "type": "object",
+        "required": [
+          "deal_id",
+          "consumer_id",
+          "name_deal",
+          "last_message",
+          "last_message_at",
+          "participants",
+          "is_purchaser"
+        ],
+        "title": "ChatSchema"
+      },
+      "deal_service_Deal": {
+        "properties": {
+          "name_deal": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name Deal",
+            "description": "Название сделки"
+          },
+          "seller_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seller Id",
+            "description": "ID аккаунта-продавца"
+          },
+          "seller_price": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Seller Price",
+            "description": "Цена продавца"
+          },
+          "YAMS_percent": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Yams Percent",
+            "description": "Процент программы"
+          },
+          "total_cost": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Cost",
+            "description": "Финальная стоимость"
+          },
+          "region_id": {
+            "type": "integer",
+            "title": "Region Id",
+            "description": "ID региона сделки"
+          },
+          "address_deal": {
+            "type": "string",
+            "title": "Address Deal",
+            "description": "Адрес сделки (формат: 'Город, улица, дом[, квартира]')"
+          },
+          "date_close": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Close",
+            "description": "Дата закрытия сделки"
+          },
+          "photos_url": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Photos Url",
+            "description": "Список путей до фотографий сделки"
+          },
+          "deal_type_id": {
+            "type": "integer",
+            "title": "Deal Type Id",
+            "description": "ID типа сделки"
+          },
+          "deal_details_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deal Details Id",
+            "description": "ID описания сделки"
+          },
+          "deal_branch_id": {
+            "type": "integer",
+            "title": "Deal Branch Id",
+            "description": "ID отрасли сделки"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "Идентификатор сделки"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At",
+            "description": "Дата создания сделки"
+          },
+          "order_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Order Count"
+          },
+          "feedback_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Feedback Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name_deal",
+          "seller_id",
+          "seller_price",
+          "YAMS_percent",
+          "total_cost",
+          "region_id",
+          "address_deal",
+          "date_close",
+          "photos_url",
+          "deal_type_id",
+          "deal_details_id",
+          "deal_branch_id",
+          "id",
+          "created_at",
+          "order_count",
+          "feedback_count"
+        ],
+        "title": "Deal"
+      },
+      "deal_service_Feedback": {
+        "properties": {
+          "deal_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deal Id",
+            "description": "ID сделки"
+          },
+          "stars": {
+            "type": "integer",
+            "title": "Stars",
+            "description": "Оценка (от 0 до 5)"
+          },
+          "details": {
+            "type": "string",
+            "title": "Details",
+            "description": "Описание отзыва"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "author_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author Id",
+            "description": "ID автора (NULL если аккаунт удалён)"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "is_purchaser": {
+            "type": "boolean",
+            "title": "Is Purchaser",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "deal_id",
+          "stars",
+          "details",
+          "id",
+          "author_id",
+          "created_at",
+          "is_purchaser"
+        ],
+        "title": "Feedback"
+      },
+      "deal_service_FeedbackCreate": {
+        "properties": {
+          "stars": {
+            "type": "integer",
+            "title": "Stars",
+            "description": "Оценка (от 0 до 5)"
+          },
+          "details": {
+            "type": "string",
+            "title": "Details",
+            "description": "Описание отзыва"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stars",
+          "details"
+        ],
+        "title": "FeedbackCreate"
+      },
+      "deal_service_HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/deal_service_ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "deal_service_Page_Deal_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/deal_service_Deal"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size"
+          },
+          "pages": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "size",
+          "pages"
+        ],
+        "title": "Page[Deal]"
+      },
+      "deal_service_ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "rating_service_BuyingTopCreate": {
+        "properties": {
+          "id_company": {
+            "type": "integer",
+            "title": "Id Company",
+            "description": "ID компании"
+          },
+          "days": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Days",
+            "description": "Количество суток для топ-позиции"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_company",
+          "days"
+        ],
+        "title": "BuyingTopCreate",
+        "description": "Схема для создания записи"
+      },
+      "rating_service_BuyingTopPublic": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id",
+            "description": "ID записи"
+          },
+          "id_company": {
+            "type": "integer",
+            "title": "Id Company",
+            "description": "ID компании"
+          },
+          "time_stop": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Time Stop",
+            "description": "Время окончания топ-позиции"
+          },
+          "total_spent": {
+            "type": "number",
+            "title": "Total Spent",
+            "description": "Общая сумма потраченных денег"
+          },
+          "purchase_count": {
+            "type": "integer",
+            "title": "Purchase Count",
+            "description": "Количество покупок"
+          },
+          "company_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Company Name",
+            "description": "Название компании"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "id_company",
+          "time_stop",
+          "total_spent",
+          "purchase_count",
+          "company_name"
+        ],
+        "title": "BuyingTopPublic"
+      },
+      "rating_service_CompanyDetailSchema": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url"
+          },
+          "slogan": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slogan"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "legal_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Legal Address"
+          },
+          "actual_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual Address"
+          },
+          "employees": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Employees"
+          },
+          "year_founded": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year Founded"
+          },
+          "website": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2083,
+                "minLength": 1,
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Website"
+          },
+          "inn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inn"
+          },
+          "social_media_links": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "maxLength": 2083,
+                  "minLength": 1,
+                  "format": "uri"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Social Media Links"
+          },
+          "region_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Id"
+          },
+          "region_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Name"
+          },
+          "partners": {
+            "items": {
+              "$ref": "#/components/schemas/rating_service_PartnerSchema"
+            },
+            "type": "array",
+            "title": "Partners"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "logo_url",
+          "slogan",
+          "description",
+          "legal_address",
+          "actual_address",
+          "employees",
+          "year_founded",
+          "website",
+          "inn",
+          "social_media_links",
+          "region_id",
+          "region_name",
+          "partners"
+        ],
+        "title": "CompanyDetailSchema"
+      },
+      "rating_service_CompanyShortSchema": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "director_full_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Director Full Name"
+          },
+          "average_rating": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Average Rating"
+          },
+          "region_id": {
+            "type": "integer",
+            "title": "Region Id"
+          },
+          "region_name": {
+            "type": "string",
+            "title": "Region Name"
+          },
+          "industries": {
+            "items": {
+              "$ref": "#/components/schemas/rating_service_IndustrySchema"
+            },
+            "type": "array",
+            "title": "Industries"
+          },
+          "partners": {
+            "items": {
+              "$ref": "#/components/schemas/rating_service_PartnerSchema"
+            },
+            "type": "array",
+            "title": "Partners"
+          },
+          "is_top": {
+            "type": "boolean",
+            "title": "Is Top",
+            "description": "Флаг топ-позиции"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "logo_url",
+          "description",
+          "director_full_name",
+          "average_rating",
+          "region_id",
+          "region_name",
+          "industries",
+          "partners",
+          "is_top"
+        ],
+        "title": "CompanyShortSchema"
+      },
+      "rating_service_CompanyVikorSchema": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url"
+          },
+          "average_rating": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Average Rating"
+          },
+          "feedback_count": {
+            "type": "integer",
+            "title": "Feedback Count"
+          },
+          "order_count": {
+            "type": "integer",
+            "title": "Order Count"
+          },
+          "repeat_customer_orders": {
+            "type": "integer",
+            "title": "Repeat Customer Orders"
+          },
+          "vikor_score": {
+            "type": "number",
+            "title": "Vikor Score"
+          },
+          "region_id": {
+            "type": "integer",
+            "title": "Region Id"
+          },
+          "region_name": {
+            "type": "string",
+            "title": "Region Name"
+          },
+          "is_top": {
+            "type": "boolean",
+            "title": "Is Top",
+            "description": "Флаг топ-позиции"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "logo_url",
+          "average_rating",
+          "feedback_count",
+          "order_count",
+          "repeat_customer_orders",
+          "vikor_score",
+          "region_id",
+          "region_name",
+          "is_top"
+        ],
+        "title": "CompanyVikorSchema"
+      },
+      "rating_service_HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/rating_service_ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "rating_service_IndustrySchema": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "IndustrySchema"
+      },
+      "rating_service_Page_CompanyShortSchema_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/rating_service_CompanyShortSchema"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size"
+          },
+          "pages": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "size",
+          "pages"
+        ],
+        "title": "Page[CompanyShortSchema]"
+      },
+      "rating_service_Page_CompanyVikorSchema_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/rating_service_CompanyVikorSchema"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size"
+          },
+          "pages": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "size",
+          "pages"
+        ],
+        "title": "Page[CompanyVikorSchema]"
+      },
+      "rating_service_PartnerSchema": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "PartnerSchema"
+      },
+      "rating_service_ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "account_service_Account": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email",
+            "description": "Email для авторизации"
+          },
+          "phone_num": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone Num",
+            "description": "Телефон (11 цифр, если указан)"
+          },
+          "region_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Id",
+            "description": "ID региона"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          },
+          "is_verified": {
+            "type": "boolean",
+            "title": "Is Verified"
+          },
+          "verification_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verification Token",
+            "description": "Токен верификации"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "purchased_deal_ids": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Purchased Deal Ids",
+            "description": "Список ID купленных сделок"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "phone_num",
+          "region_id",
+          "id",
+          "is_active",
+          "is_verified",
+          "verification_token",
+          "created_at",
+          "role",
+          "purchased_deal_ids"
+        ],
+        "title": "Account"
+      },
+      "account_service_Body_upload_logo_company_upload_logo_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_logo_company_upload_logo_post"
+      },
+      "account_service_Body_upload_photo_user_upload_photo_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_photo_user_upload_photo_post"
+      },
+      "account_service_BuyingTopPublic": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id",
+            "description": "ID записи"
+          },
+          "id_company": {
+            "type": "integer",
+            "title": "Id Company",
+            "description": "ID компании"
+          },
+          "time_stop": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Time Stop",
+            "description": "Время окончания топ-позиции"
+          },
+          "total_spent": {
+            "type": "number",
+            "title": "Total Spent",
+            "description": "Общая сумма потраченных денег"
+          },
+          "purchase_count": {
+            "type": "integer",
+            "title": "Purchase Count",
+            "description": "Количество покупок"
+          },
+          "company_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Company Name",
+            "description": "Название компании"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "id_company",
+          "time_stop",
+          "total_spent",
+          "purchase_count",
+          "company_name"
+        ],
+        "title": "BuyingTopPublic"
+      },
+      "account_service_ChangePasswordRequest": {
+        "properties": {
+          "old_password": {
+            "type": "string",
+            "title": "Old Password"
+          },
+          "new_password": {
+            "type": "string",
+            "title": "New Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "old_password",
+          "new_password"
+        ],
+        "title": "ChangePasswordRequest"
+      },
+      "account_service_Company": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Название компании"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "description": "Описание компании"
+          },
+          "slogan": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slogan",
+            "description": "Слоган"
+          },
+          "legal_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Legal Address",
+            "description": "Юридический адрес"
+          },
+          "actual_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual Address",
+            "description": "Фактический адрес"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url",
+            "description": "Путь до логотипа"
+          },
+          "employees": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Employees",
+            "description": "Количество сотрудников"
+          },
+          "year_founded": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year Founded",
+            "description": "Год основания"
+          },
+          "website": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Website",
+            "description": "Ссылка на сайт"
+          },
+          "inn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inn",
+            "description": "ИНН (10 цифр)"
+          },
+          "kpp": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kpp",
+            "description": "КПП (9 цифр)"
+          },
+          "ogrn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ogrn",
+            "description": "ОГРН (13 цифр)"
+          },
+          "oktmo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oktmo",
+            "description": "ОКТМО (8 или 11 цифр)"
+          },
+          "okpo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Okpo",
+            "description": "ОКПО (8 цифр)"
+          },
+          "director_full_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Director Full Name",
+            "description": "ФИО директора"
+          },
+          "social_media_links": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Social Media Links",
+            "description": "Ссылки на соцсети"
+          },
+          "partner_companies": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Partner Companies",
+            "description": "ID партнёрских компаний (до 3)"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "account_id": {
+            "type": "integer",
+            "title": "Account Id"
+          },
+          "account": {
+            "$ref": "#/components/schemas/account_service_Account"
+          },
+          "partner_companies_names": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Partner Companies Names",
+            "readOnly": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "description",
+          "slogan",
+          "legal_address",
+          "actual_address",
+          "logo_url",
+          "employees",
+          "year_founded",
+          "website",
+          "inn",
+          "kpp",
+          "ogrn",
+          "oktmo",
+          "okpo",
+          "director_full_name",
+          "social_media_links",
+          "partner_companies",
+          "id",
+          "account_id",
+          "account",
+          "partner_companies_names"
+        ],
+        "title": "Company"
+      },
+      "account_service_CompanyUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "slogan": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slogan"
+          },
+          "legal_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Legal Address"
+          },
+          "actual_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual Address"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url"
+          },
+          "employees": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Employees"
+          },
+          "year_founded": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year Founded"
+          },
+          "website": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Website"
+          },
+          "inn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inn"
+          },
+          "kpp": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kpp"
+          },
+          "ogrn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ogrn"
+          },
+          "oktmo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oktmo"
+          },
+          "okpo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Okpo"
+          },
+          "director_full_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Director Full Name"
+          },
+          "social_media_links": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Social Media Links"
+          },
+          "partner_companies": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Partner Companies"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "email"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "phone_num": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone Num"
+          },
+          "region_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Id"
+          }
+        },
+        "type": "object",
+        "title": "CompanyUpdate"
+      },
+      "account_service_HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/account_service_ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "account_service_User": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "fullname": {
+            "type": "string",
+            "title": "Fullname"
+          },
+          "account_id": {
+            "type": "integer",
+            "title": "Account Id"
+          },
+          "account": {
+            "$ref": "#/components/schemas/account_service_Account"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "fullname",
+          "account_id",
+          "account"
+        ],
+        "title": "User"
+      },
+      "account_service_UserUpdate": {
+        "properties": {
+          "fullname": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fullname"
+          },
+          "photo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Photo Url"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "email"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "phone_num": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone Num"
+          },
+          "region_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Id"
+          }
+        },
+        "type": "object",
+        "title": "UserUpdate"
+      },
+      "account_service_ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
